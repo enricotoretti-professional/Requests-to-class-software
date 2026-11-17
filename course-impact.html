@@ -1,0 +1,1890 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a6162d">
+  <title>BSP AI | AI Teaching Material Studio</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --red: #a5162e;
+      --red-dark: #851025;
+      --red-pale: #f9ecef;
+      --navy: #183143;
+      --ink: #253746;
+      --muted: #64737d;
+      --paper: #f4f3f0;
+      --white: #fff;
+      --line: #e2e4e3;
+      --teal: #226e70;
+      --teal-pale: #eaf3f2;
+      --gold: #d3a443;
+      --shadow: 0 14px 36px rgba(34, 45, 54, .08);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: var(--paper); color: var(--ink); font: 15px/1.5 Arial, Helvetica, sans-serif; }
+    button, select { font: inherit; }
+    a { color: inherit; }
+
+    .utility { background: #f7f7f6; border-bottom: 1px solid #e8e8e6; }
+    .utility-inner, .masthead-inner, .nav-inner, main, .footer-inner { width: min(1190px, calc(100% - 48px)); margin: 0 auto; }
+    .utility-inner { display: flex; justify-content: flex-end; gap: 23px; min-height: 34px; align-items: center; color: #53636e; font-size: .73rem; }
+    .utility a, .main-nav a { text-decoration: none; }
+    .utility a:hover, .main-nav a:hover { text-decoration: underline; }
+    .masthead { background: var(--white); }
+    .masthead-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 21px 0 19px; }
+    .identity { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+    .identity-mark { display: grid; width: 52px; height: 52px; place-items: center; border: 2px solid var(--red); border-radius: 2px; color: var(--red); font-family: Georgia, "Times New Roman", serif; font-size: 1.65rem; font-weight: 700; }
+    .identity-name { color: #33434d; font: 1.1rem/1.12 Georgia, "Times New Roman", serif; }
+    .identity-name strong { display: block; font-size: 1.18rem; font-weight: 700; }
+    .identity-name span { display: block; margin-top: 4px; color: #71808a; font: .67rem/1.3 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .demo-chip { padding: 7px 11px; border: 1px solid #e7cbd0; border-radius: 3px; background: var(--red-pale); color: var(--red-dark); font-size: .69rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+
+    .main-nav { background: var(--red); color: white; }
+    .nav-inner { display: flex; min-height: 45px; align-items: center; gap: clamp(18px, 3vw, 36px); overflow-x: auto; white-space: nowrap; }
+    .main-nav a { padding: 13px 0; font-size: .78rem; }
+    .main-nav a:first-child { font-weight: 700; }
+    .main-nav .nav-spacer { flex: 1; }
+    .main-nav .active { border-bottom: 3px solid #f1d78f; }
+
+    main { padding: 26px 0 62px; }
+    .breadcrumbs { margin: 0 0 17px; color: #71808a; font-size: .74rem; }
+    .breadcrumbs a { text-decoration: none; }
+    .breadcrumbs a:hover { text-decoration: underline; }
+    .course-heading { padding: 24px 29px 27px; border-left: 5px solid var(--red); background: var(--white); box-shadow: 0 5px 20px rgba(34,45,54,.035); }
+    .course-kicker { margin: 0 0 8px; color: var(--red); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    h1 { margin: 0; color: #273c4a; font: 500 clamp(2rem, 4vw, 3rem)/1.07 Georgia, "Times New Roman", serif; letter-spacing: -.025em; }
+    .course-subtitle { max-width: 800px; margin: 13px 0 0; color: #5d6e78; font-size: .92rem; }
+    .concept-warning { display: flex; gap: 10px; align-items: flex-start; margin: 18px 0 22px; padding: 12px 15px; border: 1px solid #edd8ab; background: #fff9eb; color: #705822; font-size: .77rem; }
+    .concept-warning strong { color: #65470b; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(255px, .75fr); gap: 20px; align-items: start; }
+    .panel { border: 1px solid #e7e7e4; background: var(--white); box-shadow: var(--shadow); }
+    .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 19px 21px 15px; border-bottom: 1px solid var(--line); }
+    .section-number { display: inline-block; margin-right: 7px; color: var(--red); font-size: .7rem; font-weight: 700; }
+    h2 { margin: 0; color: #283e4c; font: 500 1.25rem/1.2 Georgia, "Times New Roman", serif; }
+    .panel-description { margin: 5px 0 0; color: var(--muted); font-size: .76rem; }
+    .panel-body { padding: 19px 21px 22px; }
+
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .input-card { padding: 15px; border: 1px solid var(--line); background: #fcfcfb; }
+    .input-label { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #314957; font-size: .78rem; font-weight: 700; }
+    .input-icon { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: var(--teal-pale); color: var(--teal); font-size: .72rem; }
+    .input-card.market .input-icon { background: var(--red-pale); color: var(--red); }
+    label.select-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: .69rem; }
+    select { width: 100%; min-height: 40px; padding: 8px 31px 8px 10px; border: 1px solid #cbd1d2; border-radius: 2px; background: white; color: var(--ink); font-size: .76rem; }
+    select:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #3b94a3; outline-offset: 3px; }
+    .source-note { margin: 9px 0 0; color: var(--muted); font-size: .68rem; }
+    .signal-meter { margin-top: 14px; }
+    .signal-label { display: flex; justify-content: space-between; gap: 9px; color: #52636d; font-size: .69rem; }
+    .meter { height: 6px; margin-top: 5px; overflow: hidden; background: #e9eded; }
+    .meter span { display: block; height: 100%; width: 0; background: var(--red); transition: width .3s ease; }
+    .student-meter .meter span { background: var(--teal); }
+
+    .decision-line { display: flex; align-items: center; justify-content: center; gap: 11px; margin: 19px 0; color: var(--muted); font-size: .73rem; text-align: center; }
+    .decision-line::before, .decision-line::after { height: 1px; flex: 1; background: #e4e6e5; content: ""; }
+    .transformation { display: grid; grid-template-columns: minmax(0, .85fr) 34px minmax(0, 1.15fr); gap: 12px; align-items: stretch; }
+    .course-state { padding: 16px; border: 1px solid var(--line); background: #f8f9f8; }
+    .course-state.proposed { border-color: #c4d9d7; background: #f2f8f7; }
+    .state-caption { display: block; margin-bottom: 9px; color: #75838a; font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .proposed .state-caption { color: var(--teal); }
+    .course-state h3 { margin: 0; color: #273e4c; font: 500 1.1rem/1.18 Georgia, "Times New Roman", serif; }
+    .course-state p { margin: 9px 0 0; color: #61717a; font-size: .73rem; }
+    .arrow { display: grid; place-items: center; color: var(--red); font-size: 1.45rem; }
+    .focus-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .focus-tag { padding: 4px 7px; border: 1px solid #d5e5e3; background: white; color: #286267; font-size: .65rem; }
+    .learning-plan { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-top: 14px; }
+    .plan-column { padding: 13px 14px; border-top: 2px solid #cad6d8; background: #fafbfa; }
+    .plan-column.proposed-plan { border-color: var(--teal); background: #f5faf9; }
+    .plan-column h4 { margin: 0 0 8px; color: #344b57; font-size: .73rem; }
+    .plan-column ul { display: grid; gap: 6px; margin: 0; padding-left: 17px; color: #5d6c75; font-size: .7rem; }
+    .project-box { margin-top: 14px; padding: 13px 15px; border-left: 3px solid var(--gold); background: #fff9eb; }
+    .project-box strong { display: block; color: #69501b; font-size: .71rem; }
+    .project-box p { margin: 4px 0 0; color: #6b6251; font-size: .74rem; }
+    .workspace-section { margin-top: 22px; scroll-margin-top: 16px; }
+    .workspace-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 19px 21px 15px; border-bottom: 1px solid var(--line); }
+    .workspace-heading h2 { margin: 0; color: #283e4c; font: 500 1.35rem/1.2 Georgia, "Times New Roman", serif; }
+    .workspace-heading p { max-width: 720px; margin: 6px 0 0; color: var(--muted); font-size: .76rem; }
+    .workspace-label { flex: 0 0 auto; padding: 5px 9px; border: 1px solid #e3d2a9; background: #fff9eb; color: #735a21; font-size: .65rem; font-weight: 700; text-transform: uppercase; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { display: grid; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: #415763; font-size: .72rem; font-weight: 700; }
+    .field small { color: var(--muted); font-size: .67rem; font-weight: 400; }
+    .field input, .field textarea, .field select {
+      width: 100%; padding: 10px 11px; border: 1px solid #cbd1d2; border-radius: 2px; background: #fff; color: var(--ink); font: inherit; font-size: .76rem;
+    }
+    .field textarea { min-height: 92px; resize: vertical; line-height: 1.5; }
+    .field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible { outline: 3px solid #3b94a3; outline-offset: 2px; }
+    .range-row { display: grid; grid-template-columns: 1fr 45px; gap: 12px; align-items: center; }
+    input[type="range"] { width: 100%; accent-color: var(--red); }
+    .range-value { color: var(--red); font-size: .8rem; font-weight: 700; text-align: right; }
+    .workspace-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 17px; }
+    .workspace-status { min-height: 20px; margin: 12px 0 0; color: var(--muted); font-size: .72rem; }
+    .workspace-status.success { color: var(--teal); }
+    .workspace-status.error { color: var(--red); }
+    .teacher-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .75fr); gap: 20px; align-items: start; }
+    [hidden] { display: none !important; }
+    .teacher-sources { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .source-card { padding: 14px 15px; border: 1px solid var(--line); background: #fcfcfb; }
+    .source-card.student-source { border-top: 3px solid var(--teal); }
+    .source-card.hr-source-card { border-top: 3px solid var(--red); }
+    .source-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: #314957; font-size: .77rem; font-weight: 700; }
+    .source-heading .explain-icon { width: 23px; height: 23px; }
+    .source-card select { margin-top: 5px; }
+    .source-metadata { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .source-metadata span { padding: 3px 6px; border: 1px solid #e1e6e5; background: white; color: #63727b; font-size: .62rem; }
+    .studio-course-row { display: grid; grid-template-columns: minmax(220px, .7fr) 1.3fr; gap: 14px; align-items: end; margin-bottom: 18px; padding: 15px; border: 1px solid #e2e8e7; background: #f7faf9; }
+    .studio-course-row .field { margin: 0; }
+    .studio-status { min-height: 34px; margin: 0; color: #5d6c75; font-size: .7rem; }
+    .studio-status strong { color: var(--teal); }
+    .teacher-fields { display: grid; gap: 13px; }
+    .teacher-preview { border: 1px solid #d5e5e3; background: #f5faf9; }
+    .teacher-preview-head { padding: 14px 16px; border-bottom: 1px solid #d5e5e3; }
+    .teacher-preview-head span { display: block; color: var(--teal); font-size: .63rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .teacher-preview-head strong { display: block; margin-top: 4px; color: #273e4c; font: 500 1.12rem/1.2 Georgia, "Times New Roman", serif; }
+    .teacher-preview-body { padding: 14px 16px 16px; }
+    .teacher-preview-body h3 { margin: 0 0 7px; color: #40545e; font-size: .7rem; }
+    .teacher-preview-body h3:not(:first-child) { margin-top: 15px; }
+    .teacher-preview-body ul { display: grid; gap: 5px; margin: 0; padding-left: 17px; color: #5d6c75; font-size: .7rem; }
+    .teacher-preview-body p { margin: 0; color: #5d6c75; font-size: .72rem; white-space: pre-wrap; }
+    .syllabus-section { margin-top: 24px; padding-top: 21px; border-top: 1px solid var(--line); }
+    .syllabus-section h3 { margin: 0; color: #283e4c; font: 500 1.15rem/1.2 Georgia, "Times New Roman", serif; }
+    .syllabus-section > p { max-width: 760px; margin: 6px 0 14px; color: var(--muted); font-size: .74rem; }
+    .syllabus-input { min-height: 170px; }
+    .syllabus-results { display: grid; gap: 10px; margin-top: 15px; }
+    .syllabus-summary { padding: 12px 14px; border-left: 3px solid var(--teal); background: #f3f8f7; color: #52636d; font-size: .72rem; }
+    .syllabus-lecture { display: grid; grid-template-columns: minmax(0, 1fr) minmax(170px, .42fr); gap: 14px; padding: 13px 14px; border: 1px solid var(--line); background: #fcfcfb; }
+    .syllabus-lecture h4 { margin: 0; color: #314957; font-size: .78rem; }
+    .syllabus-lecture p { margin: 5px 0 0; color: #64737d; font-size: .69rem; }
+    .syllabus-decision { align-self: start; padding: 6px 8px; background: var(--teal-pale); color: #27645f; font-size: .67rem; font-weight: 700; }
+    .syllabus-decision.review { background: #fff5e3; color: #805c1e; }
+    .syllabus-decision.priority { background: var(--red-pale); color: var(--red-dark); }
+    .syllabus-decision.mandatory { background: #eaf0f6; color: #23465d; }
+    .syllabus-empty { color: var(--muted); font-size: .73rem; }
+    .syllabus-proposal { margin-top: 16px; border: 1px solid #d5e5e3; background: #f7faf9; }
+    .syllabus-proposal-heading { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; padding: 14px 15px; border-bottom: 1px solid #d5e5e3; }
+    .syllabus-proposal-heading h4 { margin: 0; color: #283e4c; font: 500 1rem/1.2 Georgia, "Times New Roman", serif; }
+    .syllabus-proposal-heading p { margin: 5px 0 0; color: var(--muted); font-size: .69rem; }
+    .proposed-syllabus-list { display: grid; gap: 0; margin: 0; padding: 4px 15px; list-style-position: inside; }
+    .proposed-syllabus-list li { padding: 9px 0; border-bottom: 1px solid #e6eceb; color: #3e535e; font-size: .73rem; }
+    .proposed-syllabus-list li:last-child { border-bottom: 0; }
+    .syllabus-item-note { display: block; margin: 3px 0 0 20px; color: #64737d; font-size: .67rem; }
+    .syllabus-item-note.addition { color: #27645f; font-weight: 700; }
+    .syllabus-item-note.mandatory { color: #23465d; font-weight: 700; }
+    .lecture-implementation { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; padding: 13px 15px; border-top: 1px solid #d5e5e3; background: white; }
+    .teacher-editor-heading { margin: 22px 0 13px; padding-top: 17px; border-top: 1px solid var(--line); }
+    .teacher-editor-heading h3 { margin: 0; color: #283e4c; font: 500 1.15rem/1.2 Georgia, "Times New Roman", serif; }
+    .teacher-editor-heading p { margin: 5px 0 0; color: var(--muted); font-size: .73rem; }
+    .review-status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 2px; background: #fff2dc; color: #805c1e; font-size: .66rem; font-weight: 700; }
+    .review-status.saved { background: #eaf3f2; color: #27645f; }
+
+    .side-panel { margin-bottom: 16px; }
+    .side-panel .panel-heading { padding: 16px 17px 13px; }
+    .side-panel .panel-body { padding: 15px 17px 17px; }
+    .metric { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid #edf0ef; }
+    .metric:last-child { border-bottom: 0; }
+    .metric span { color: #5b6b74; font-size: .73rem; }
+    .metric strong { color: var(--navy); font-size: .84rem; }
+    .explain-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .explain-list li { display: grid; grid-template-columns: 22px 1fr; gap: 9px; color: #596a73; font-size: .72rem; }
+    .explain-icon { display: grid; width: 22px; height: 22px; place-items: center; border-radius: 50%; background: #f2f4f3; color: var(--red); font-size: .68rem; font-weight: 700; }
+    .explain-list strong { display: block; margin-bottom: 2px; color: #354b57; font-size: .72rem; }
+    .action-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; }
+    .action-note { max-width: 470px; color: var(--muted); font-size: .68rem; }
+    .button { min-height: 39px; padding: 0 15px; border: 1px solid var(--red); border-radius: 2px; background: var(--red); color: white; cursor: pointer; font-size: .75rem; font-weight: 700; }
+    .button:hover { background: var(--red-dark); }
+    .button.secondary { border-color: #c8d0d1; background: white; color: #425661; }
+    .button.secondary:hover { border-color: var(--red); color: var(--red); }
+    .import-button { display: inline-flex; align-items: center; margin-top: 9px; }
+
+    footer { border-top: 5px solid var(--red); background: #283a45; color: white; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; padding: 23px 0; }
+    .footer-brand { font: 1rem Georgia, "Times New Roman", serif; }
+    .footer-brand span { display: block; margin-top: 5px; color: #d3dade; font: .68rem Arial, sans-serif; }
+    .footer-note { max-width: 500px; color: #d3dade; font-size: .68rem; text-align: right; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+      .side-panel { margin: 0; }
+    }
+    @media (max-width: 620px) {
+      .utility-inner, .masthead-inner, .nav-inner, main, .footer-inner { width: min(100% - 30px, 1190px); }
+      .utility-inner { justify-content: center; gap: 13px; font-size: .67rem; }
+      .masthead-inner { align-items: flex-start; padding: 16px 0; }
+      .identity-mark { width: 43px; height: 43px; font-size: 1.4rem; }
+      .identity { gap: 10px; }
+      .identity-name, .identity-name strong { font-size: .98rem; }
+      .identity-name span { font-size: .57rem; }
+      .demo-chip { max-width: 105px; padding: 6px 8px; font-size: .57rem; text-align: center; }
+      .nav-inner { gap: 20px; }
+      .nav-inner a { font-size: .7rem; }
+      main { padding-top: 19px; }
+      .course-heading { padding: 19px 18px 21px; }
+      .panel-heading, .panel-body { padding-right: 16px; padding-left: 16px; }
+      .input-grid, .learning-plan, .side-column, .teacher-sources, .studio-course-row { grid-template-columns: 1fr; }
+      .form-grid, .teacher-grid { grid-template-columns: 1fr; }
+      .syllabus-lecture { grid-template-columns: 1fr; }
+      .lecture-implementation { grid-template-columns: 1fr; }
+      .syllabus-proposal-heading { flex-direction: column; }
+      .field.full { grid-column: auto; }
+      .transformation { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); }
+      .footer-inner { flex-direction: column; }
+      .footer-note { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="utility">
+    <div class="utility-inner">
+      <a href="#course">Università</a>
+      <a href="#course">Studenti</a>
+      <a href="#course">Docenti</a>
+      <a href="#course">Contatti</a>
+      <span aria-hidden="true">EN</span>
+    </div>
+  </div>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="identity" href="index.html" aria-label="BSP AI home">
+        <span class="identity-mark" aria-hidden="true">B</span>
+        <span class="identity-name"><strong>BSP AI</strong> Learning pathways · Milano-Bicocca concept demo</span>
+      </a>
+      <span class="demo-chip">Concept prototype<br>not an official university page</span>
+    </div>
+  </header>
+  <nav class="main-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="active" href="#teacher-workspace" aria-current="page">Teaching material studio</a>
+      <a href="#teacher-sources">Student insights</a>
+      <a href="#teacher-sources">HR market insights</a>
+      <span class="nav-spacer"></span>
+      <a href="index.html">Student questionnaire</a>
+      <a href="hr-intake.html">HR data intake</a>
+      <a href="#teacher-preview">Draft preview</a>
+    </div>
+  </nav>
+
+  <main id="course">
+    <p class="breadcrumbs">BSP AI &nbsp;›&nbsp; Teaching support &nbsp;›&nbsp; Mechanical Engineering</p>
+    <section class="course-heading">
+      <p class="course-kicker">AI teaching material studio · Mechanical Engineering</p>
+      <h1>Plan a lesson around your course and your students</h1>
+      <p class="course-subtitle">Bring student interests and HR-reviewed skill signals into a teaching draft. Choose a course, shape the lesson, and keep faculty in control of every change.</p>
+    </section>
+
+    <div class="concept-warning" role="note">
+      <span aria-hidden="true">ⓘ</span>
+      <div><strong>Teaching studio · student + HR inputs.</strong> Download an opt-in profile from the student questionnaire and a normalized JSON export from HR intake, then import both below. Fictional snapshots are available for a quick demo. Draft generation currently uses transparent templates, not a live AI model; nothing is published automatically.</div>
+    </div>
+
+    <div class="layout" hidden>
+      <section class="panel" aria-labelledby="pathway-title">
+        <div class="panel-heading">
+          <div>
+            <h2 id="pathway-title"><span class="section-number">01</span>From requests to a course idea</h2>
+            <p class="panel-description">Adjust either input. The proposed course focus updates to show how the two signals can work together.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="input-grid">
+            <section class="input-card student-meter" aria-labelledby="student-signal-title">
+              <div class="input-label" id="student-signal-title"><span class="input-icon" aria-hidden="true">S</span>Student interests</div>
+              <label class="select-label" for="student-interest">What would students like to explore?</label>
+              <select id="student-interest">
+                <option value="mobility">Sustainable mobility and energy</option>
+                <option value="design">Product design and simulation</option>
+                <option value="automation">Robotics and automation</option>
+              </select>
+              <div class="signal-meter">
+                <div class="signal-label"><span>Illustrative student interest</span><strong id="student-percent">72%</strong></div>
+                <div class="meter" aria-hidden="true"><span id="student-bar"></span></div>
+              </div>
+              <p class="source-note">Example questionnaire signal · fictional</p>
+            </section>
+
+            <section class="input-card market" aria-labelledby="market-signal-title">
+              <div class="input-label" id="market-signal-title"><span class="input-icon" aria-hidden="true">HR</span>Employer skill demand</div>
+              <label class="select-label" for="market-demand">What is appearing in reviewed job postings?</label>
+              <select id="market-demand">
+                <option value="simulation">CAD, FEA and simulation</option>
+                <option value="energy">Energy systems and efficiency</option>
+                <option value="automation">Controls and industrial automation</option>
+              </select>
+              <div class="signal-meter">
+                <div class="signal-label"><span>Illustrative HR priority</span><strong id="market-percent">68/100</strong></div>
+                <div class="meter" aria-hidden="true"><span id="market-bar"></span></div>
+              </div>
+              <p class="source-note">Fictional HR signal · not a market percentage</p>
+            </section>
+          </div>
+
+          <div class="decision-line">A transparent rule combines both inputs · faculty reviews the proposal</div>
+
+          <div class="transformation" aria-live="polite">
+            <article class="course-state">
+              <span class="state-caption">Example current foundation</span>
+              <h3 id="baseline-title">Mechanical design foundations</h3>
+              <p id="baseline-copy">Core principles in mechanical design, loading, components, and engineering drawings.</p>
+              <div class="focus-tags" id="baseline-tags"></div>
+            </article>
+            <div class="arrow" aria-hidden="true">→</div>
+            <article class="course-state proposed">
+              <span class="state-caption">Possible tailored emphasis</span>
+              <h3 id="proposal-title"></h3>
+              <p id="proposal-copy"></p>
+              <div class="focus-tags" id="proposal-tags"></div>
+            </article>
+          </div>
+
+          <div class="learning-plan">
+            <section class="plan-column">
+              <h4>Foundation · stays in the course</h4>
+              <ul id="foundation-list"></ul>
+            </section>
+            <section class="plan-column proposed-plan">
+              <h4>Additional applied focus · example</h4>
+              <ul id="tailored-list"></ul>
+            </section>
+          </div>
+
+          <div class="project-box">
+            <strong>Example applied assignment</strong>
+            <p id="project-copy"></p>
+          </div>
+
+          <div class="action-row">
+            <span class="action-note">This illustrates how a course could evolve without replacing its core. The faculty team decides what—if anything—to adopt after reviewing evidence and learning outcomes.</span>
+            <button class="button secondary" id="reset-button" type="button">Reset example</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-column" aria-label="How course tailoring works">
+        <section class="panel side-panel">
+          <div class="panel-heading">
+            <div>
+              <h2><span class="section-number">02</span>What informs a proposal?</h2>
+              <p class="panel-description">Separate signals; one reviewed decision.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <ul class="explain-list">
+              <li><span class="explain-icon">S</span><span><strong>Student voice</strong>Interests and goals from an optional student questionnaire.</span></li>
+              <li><span class="explain-icon">H</span><span><strong>HR evidence</strong>Skills found in an authorized, human-reviewed posting sample.</span></li>
+              <li><span class="explain-icon">F</span><span><strong>Faculty judgment</strong>Learning outcomes, course fit, and academic standards.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel side-panel">
+          <div class="panel-heading">
+            <div>
+              <h2><span class="section-number">03</span>From evidence to learning</h2>
+              <p class="panel-description">A suggested workflow for the university.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="metric"><span>01 · Listen</span><strong>Student goals</strong></div>
+            <div class="metric"><span>02 · Review</span><strong>Employer skills</strong></div>
+            <div class="metric"><span>03 · Map</span><strong>Course outcomes</strong></div>
+            <div class="metric"><span>04 · Approve</span><strong>Faculty decision</strong></div>
+            <div class="metric"><span>05 · Improve</span><strong>Teaching materials</strong></div>
+          </div>
+        </section>
+
+        <section class="panel side-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Principle</h2>
+              <p class="panel-description">AI supports the process; people own the decision.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <p class="panel-description">Recommendations should be explainable, optional, based on dated evidence, and reviewed by educators. Job-posting frequency is a signal—not a promise of employment.</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel workspace-section" id="hr-workspace" aria-labelledby="hr-workspace-title" hidden>
+      <div class="workspace-heading">
+        <div>
+          <h2 id="hr-workspace-title"><span class="section-number">04</span>HR · Shape the employer signal</h2>
+          <p>Adjust a reviewed example to show how HR evidence can influence a teaching proposal. Changes stay in this browser and are not written to the intake database.</p>
+        </div>
+        <span class="workspace-label">HR workspace · demo</span>
+      </div>
+      <div class="panel-body">
+        <div class="form-grid">
+          <div class="field">
+            <label for="hr-role">Role profile</label>
+            <select id="hr-role">
+              <option>Mechanical Design Engineer</option>
+              <option>Automation Engineer</option>
+              <option>Energy Systems Engineer</option>
+              <option>Manufacturing Engineer</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="hr-source">Evidence source</label>
+            <select id="hr-source">
+              <option>LinkedIn</option>
+              <option>Indeed</option>
+              <option>Bicocca Career Service</option>
+              <option>Other approved source</option>
+              <option>Combined sources</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="hr-skill-focus">Skill focus <small>Editable; shown in the course proposal</small></label>
+            <input id="hr-skill-focus" type="text" maxlength="70" value="CAD, FEA and simulation">
+          </div>
+          <div class="field">
+            <label for="hr-posting-count">Reviewed postings in this example</label>
+            <input id="hr-posting-count" type="number" min="1" max="5000" value="34">
+          </div>
+          <div class="field full">
+            <label for="hr-demand-strength">HR-assessed demand priority <small>Illustrative prioritization, not a market percentage</small></label>
+            <div class="range-row">
+              <input id="hr-demand-strength" type="range" min="0" max="100" value="68">
+              <output class="range-value" id="hr-demand-value" for="hr-demand-strength">68</output>
+            </div>
+          </div>
+          <div class="field full">
+            <label for="hr-review-note">HR context for teachers <small>What should educators know about this signal?</small></label>
+            <textarea id="hr-review-note" rows="2">Example only: employers value candidates who can use simulation and explain engineering trade-offs.</textarea>
+          </div>
+        </div>
+        <div class="workspace-actions">
+          <button class="button" id="apply-hr-button" type="button">Apply reviewed HR signal</button>
+          <button class="button secondary" id="reset-hr-button" type="button">Reset HR example</button>
+          <span class="review-status" id="hr-review-state">Demo signal · not verified</span>
+        </div>
+        <p class="workspace-status" id="hr-workspace-status" role="status" aria-live="polite">Adjust fields, then apply the HR signal to update the course proposal.</p>
+      </div>
+    </section>
+
+    <section class="panel workspace-section" id="teacher-workspace" aria-labelledby="teacher-workspace-title">
+      <div class="workspace-heading">
+        <div>
+          <h2 id="teacher-workspace-title">Teaching workspace</h2>
+          <p>Use the student and HR snapshots below to prepare a course-specific lesson draft. BSP AI makes an explainable starting draft; review and adapt every suggested teaching material before use.</p>
+        </div>
+        <span class="workspace-label">Faculty workspace · draft only</span>
+      </div>
+      <div class="panel-body">
+        <div class="teacher-sources" id="teacher-sources" aria-label="Teaching draft input data">
+          <section class="source-card student-source">
+            <div class="source-heading"><span class="explain-icon" aria-hidden="true">S</span>Student interest snapshot</div>
+            <label class="sr-only" for="studio-student-interest">Choose an example student interest snapshot</label>
+            <select id="studio-student-interest">
+              <option value="mobility">Sustainable mobility and energy</option>
+              <option value="design">Product design and simulation</option>
+              <option value="automation">Robotics and automation</option>
+            </select>
+            <label class="button secondary import-button" for="student-snapshot-file">Import student profile JSON</label>
+            <input id="student-snapshot-file" class="sr-only" type="file" accept=".json,application/json">
+            <div class="source-metadata"><span id="student-source-count">Demo snapshot · 1 profile</span><span id="student-source-detail">Student questionnaire · fictional</span></div>
+          </section>
+          <section class="source-card hr-source-card">
+            <div class="source-heading"><span class="explain-icon" aria-hidden="true">HR</span>HR job-market snapshot</div>
+            <label class="sr-only" for="studio-market-demand">Choose an example HR skill demand snapshot</label>
+            <select id="studio-market-demand">
+              <option value="simulation">CAD, FEA and simulation</option>
+              <option value="energy">Energy systems and efficiency</option>
+              <option value="automation">Controls and industrial automation</option>
+            </select>
+            <label class="button secondary import-button" for="hr-snapshot-file">Import HR normalized JSON</label>
+            <input id="hr-snapshot-file" class="sr-only" type="file" accept=".json,application/json">
+            <label class="sr-only" for="studio-hr-source">Select the example HR data source</label>
+            <select id="studio-hr-source">
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Indeed">Indeed</option>
+              <option value="Bicocca Career Service">Bicocca Career Service</option>
+              <option value="Other approved source">Other approved source</option>
+              <option value="Combined sources">Combined sources</option>
+            </select>
+            <div class="source-metadata"><span id="hr-source-count">34 example postings</span><span id="hr-skill-summary">CAD, FEA and simulation</span><span id="hr-source-detail">HR intake · fictional</span></div>
+          </section>
+        </div>
+        <div class="studio-course-row">
+          <div class="field">
+            <label for="studio-course">Course to prepare material for</label>
+            <select id="studio-course">
+              <option value="mechanical-design">Mechanical Design Foundations</option>
+              <option value="thermodynamics">Applied Thermodynamics</option>
+              <option value="manufacturing">Manufacturing Processes</option>
+              <option value="robotics">Robotics and Mechatronics</option>
+              <option value="materials">Materials and Testing</option>
+            </select>
+          </div>
+          <div>
+            <p class="studio-status" id="studio-source-status" role="status" aria-live="polite">Select a subject and review its syllabus below. Generation uses guided templates; no live AI model is connected.</p>
+          </div>
+        </div>
+        <section class="syllabus-section" aria-labelledby="syllabus-review-title">
+          <h3 id="syllabus-review-title">1 · Start with the subject syllabus</h3>
+          <p>Paste lecture or module titles from the existing syllabus. BSP AI compares lecture titles with the selected student interests and HR inputs, then drafts a proposed syllabus and focused lecture implementation for teacher review. Some foundational subjects receive protected status when detected. This prototype uses transparent keyword rules and templates, not a connected AI model.</p>
+          <div class="field">
+            <label for="syllabus-input">Current lecture or module titles <small>One per line; paste titles only or include short descriptions</small></label>
+            <textarea class="syllabus-input" id="syllabus-input" rows="7" placeholder="Example:&#10;Engineering drawing and CAD&#10;Finite element analysis&#10;Thermodynamics and heat transfer"></textarea>
+          </div>
+          <div class="workspace-actions">
+            <button class="button" id="analyze-syllabus-button" type="button">Analyze and draft syllabus</button>
+            <button class="button secondary" id="load-example-syllabus-button" type="button">Load example syllabus</button>
+            <label class="button secondary import-button" for="syllabus-file">Import syllabus text file</label>
+            <input id="syllabus-file" class="sr-only" type="file" accept=".txt,text/plain">
+          </div>
+          <p class="workspace-status" id="syllabus-status" role="status" aria-live="polite">Uses the student and HR snapshots above. Import normalized HR data for a market comparison based on that sample.</p>
+          <div class="syllabus-results" id="syllabus-results" aria-live="polite"></div>
+          <section class="syllabus-proposal" id="syllabus-proposal" aria-labelledby="syllabus-proposal-title" hidden>
+            <div class="syllabus-proposal-heading">
+              <div>
+                <h4 id="syllabus-proposal-title">Proposed subject syllabus · teacher review</h4>
+                <p id="syllabus-proposal-summary"></p>
+              </div>
+              <span class="workspace-label">Draft · not approved</span>
+            </div>
+            <ol class="proposed-syllabus-list" id="proposed-syllabus-list"></ol>
+            <div class="lecture-implementation">
+              <div class="field">
+                <label for="implementation-lecture">Lecture to develop</label>
+                <select id="implementation-lecture"></select>
+              </div>
+              <button class="button" id="generate-lecture-button" type="button">Generate lecture implementation preview</button>
+            </div>
+            <p class="workspace-status" id="implementation-status" role="status" aria-live="polite">Choose a lecture to create its editable outcomes, teaching topics, and applied activity below.</p>
+          </section>
+        </section>
+        <div class="teacher-editor-heading">
+          <h3>2 · Review and edit the lecture preview</h3>
+          <p>Generate one syllabus lecture above to create a focused, editable draft here. Review the outcomes and teaching materials before any course use.</p>
+        </div>
+        <div class="teacher-grid">
+          <div>
+            <div class="teacher-fields">
+              <div class="field">
+                <label for="teacher-course-title">Lesson or module title</label>
+                <input id="teacher-course-title" type="text" maxlength="120">
+              </div>
+              <div class="field">
+                <label for="teacher-outcomes">Learning outcomes <small>One outcome per line</small></label>
+                <textarea id="teacher-outcomes" rows="4"></textarea>
+              </div>
+              <div class="field">
+                <label for="teacher-topics">Teaching topics <small>One topic per line</small></label>
+                <textarea id="teacher-topics" rows="4"></textarea>
+              </div>
+              <div class="field">
+                <label for="teacher-assignment">Applied assignment or classroom activity</label>
+                <textarea id="teacher-assignment" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="workspace-actions">
+              <button class="button" id="use-proposal-button" type="button">Generate from selected inputs</button>
+              <button class="button secondary" id="save-draft-button" type="button">Save teaching draft</button>
+              <button class="button secondary" id="reset-teacher-button" type="button">Reset editor</button>
+              <button class="button secondary" id="export-draft-button" type="button">Export draft</button>
+            </div>
+            <p class="workspace-status" id="teacher-workspace-status" role="status" aria-live="polite">Drafts are saved only in this browser. Saving does not approve or publish course changes.</p>
+          </div>
+          <aside class="teacher-preview" id="teacher-preview" aria-live="polite" aria-label="Teaching draft preview">
+            <div class="teacher-preview-head">
+              <span>Teacher preview · not published</span>
+              <strong id="preview-course-title"></strong>
+            </div>
+            <div class="teacher-preview-body">
+              <h3>Learning outcomes</h3>
+              <ul id="preview-outcomes"></ul>
+              <h3>Teaching topics</h3>
+              <ul id="preview-topics"></ul>
+              <h3>Applied activity</h3>
+              <p id="preview-assignment"></p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">BSP AI<span>Learning pathways · independent Milano-Bicocca concept prototype</span></div>
+      <div class="footer-note">This is an independently created demonstration and is not an official University of Milano-Bicocca webpage. University name is used only to describe the project concept; no official logos, images, or institutional claims are used.</div>
+    </div>
+  </footer>
+
+  <script>
+    const scenarios = {
+      mobility: {
+        studentPercent: 72,
+        baselineTitle: "Mechanical design foundations",
+        baselineCopy: "Core principles in mechanical design, loading, components, and engineering drawings.",
+        foundation: ["Loads and material behavior", "Mechanical components", "Technical drawings and design process"],
+        demand: {
+          simulation: {
+            percent: 68,
+            title: "Lightweight mobility: design with simulation",
+            copy: "Apply mechanical design to a mobility component, using simulation to compare performance, mass, and material choices.",
+            tags: ["Sustainable mobility", "CAD", "FEA"],
+            topics: ["Build a CAD model of a lightweight component", "Use FEA to compare design alternatives", "Discuss material and lifecycle trade-offs"],
+            project: "Redesign a bracket for a low-emission vehicle. Compare two concepts for strength and mass, then explain the assumptions and trade-offs."
+          },
+          energy: {
+            percent: 74,
+            title: "Efficient mobility: thermal design and energy use",
+            copy: "Connect mechanical design with thermal performance and energy efficiency in a transport application.",
+            tags: ["Sustainable mobility", "Thermal systems", "Efficiency"],
+            topics: ["Review heat transfer in a mobility system", "Estimate energy losses in a simplified case", "Compare design choices for efficiency"],
+            project: "Propose a cooling improvement for an electric-vehicle subsystem. Estimate the effect of the change and identify what would need testing."
+          },
+          automation: {
+            percent: 61,
+            title: "Smart mobility: mechanisms and control",
+            copy: "Explore how mechanical assemblies interact with sensors and control in a mobility or production system.",
+            tags: ["Sustainable mobility", "Control", "Mechatronics"],
+            topics: ["Map the mechanical and control elements of a system", "Model a simple actuator linkage", "Review safety and reliability considerations"],
+            project: "Develop a concept for an automated inspection fixture. Show its mechanism, sensing points, and how the design supports reliable operation."
+          }
+        }
+      },
+      design: {
+        studentPercent: 79,
+        baselineTitle: "Mechanical design foundations",
+        baselineCopy: "Core principles in mechanical design, loading, components, and engineering drawings.",
+        foundation: ["Loads and material behavior", "Mechanical components", "Technical drawings and design process"],
+        demand: {
+          simulation: {
+            percent: 68,
+            title: "Product design: validate concepts with FEA",
+            copy: "Extend the design process with computer-aided engineering to test concepts earlier and make evidence-based revisions.",
+            tags: ["Product design", "CAD", "FEA"],
+            topics: ["Translate design requirements into constraints", "Compare a hand calculation with an FEA result", "Iterate geometry using test evidence"],
+            project: "Design a compact lifting hook. Check a simplified analytical estimate against a finite-element model and present a revised design."
+          },
+          energy: {
+            percent: 74,
+            title: "Eco-design: performance across the product life",
+            copy: "Combine product design with energy and material choices, considering how early design decisions affect efficiency and use.",
+            tags: ["Eco-design", "Energy use", "Materials"],
+            topics: ["Define product performance requirements", "Estimate energy use in operation", "Compare material and efficiency trade-offs"],
+            project: "Redesign a small mechanical product to reduce energy use during operation. State the assumptions and compare alternatives."
+          },
+          automation: {
+            percent: 61,
+            title: "Design for automation: products and assembly",
+            copy: "Shape components and assemblies for reliable, maintainable production with automated equipment.",
+            tags: ["Product design", "Assembly", "Automation"],
+            topics: ["Review design-for-assembly principles", "Consider robot access and part handling", "Compare assembly time and maintainability"],
+            project: "Revise a small assembly for robotic handling. Present the component changes and identify a validation test."
+          }
+        }
+      },
+      automation: {
+        studentPercent: 66,
+        baselineTitle: "Mechanical systems foundations",
+        baselineCopy: "Core mechanical principles for components, motion, forces, and system behavior.",
+        foundation: ["Forces and motion", "Mechanical components", "System diagrams and design process"],
+        demand: {
+          simulation: {
+            percent: 68,
+            title: "Robotics: design and simulate a mechanism",
+            copy: "Connect mechanism design with simulation to check motion, loads, and component behavior in a robotic application.",
+            tags: ["Robotics", "Mechanisms", "Simulation"],
+            topics: ["Model a simple robot linkage", "Check motion and loading in a simulation", "Relate mechanism design to end-effector needs"],
+            project: "Design and simulate a simple pick-and-place linkage. Compare its workspace and loading under two design configurations."
+          },
+          energy: {
+            percent: 74,
+            title: "Efficient automation: energy-aware machines",
+            copy: "Consider energy consumption alongside mechanical performance when specifying an automated machine or production cell.",
+            tags: ["Automation", "Energy efficiency", "Machine design"],
+            topics: ["Identify energy use in a machine cycle", "Compare operating modes", "Consider mechanical efficiency and duty cycle"],
+            project: "Review a simplified automated machine cycle and suggest a mechanical or operational change that could reduce energy use."
+          },
+          automation: {
+            percent: 83,
+            title: "Industrial automation: mechanisms and controls",
+            copy: "Pair mechanical system design with actuators, sensors, and control logic in an applied automation case.",
+            tags: ["Robotics", "Control systems", "Mechatronics"],
+            topics: ["Select actuator and sensor requirements", "Map mechanical motion to a control sequence", "Review safety and failure modes"],
+            project: "Create a concept for an automated sorting station. Show its mechanical layout, sensor logic, and a basic sequence of operation."
+          }
+        }
+      }
+    };
+
+    const studentSelect = document.getElementById("student-interest");
+    const demandSelect = document.getElementById("market-demand");
+    const hrRoleInput = document.getElementById("hr-role");
+    const hrSourceInput = document.getElementById("hr-source");
+    const hrSkillInput = document.getElementById("hr-skill-focus");
+    const hrPostingCountInput = document.getElementById("hr-posting-count");
+    const hrDemandInput = document.getElementById("hr-demand-strength");
+    const hrReviewNoteInput = document.getElementById("hr-review-note");
+    const hrWorkspaceStatus = document.getElementById("hr-workspace-status");
+    const teacherTitleInput = document.getElementById("teacher-course-title");
+    const teacherOutcomesInput = document.getElementById("teacher-outcomes");
+    const teacherTopicsInput = document.getElementById("teacher-topics");
+    const teacherAssignmentInput = document.getElementById("teacher-assignment");
+    const teacherWorkspaceStatus = document.getElementById("teacher-workspace-status");
+    const studioStudentSelect = document.getElementById("studio-student-interest");
+    const studioDemandSelect = document.getElementById("studio-market-demand");
+    const studioSourceSelect = document.getElementById("studio-hr-source");
+    const studioCourseSelect = document.getElementById("studio-course");
+    const studioSourceStatus = document.getElementById("studio-source-status");
+    const teacherStorageKey = "bsp-ai-teaching-draft-v1";
+    const hrStorageKey = "bsp-ai-hr-signal-v1";
+    let hrSignalReviewed = false;
+    let savedDraftAvailable = false;
+    let importedStudentSnapshot = null;
+    let importedHrSnapshot = null;
+    let analyzedSyllabus = null;
+    const courseContexts = {
+      "mechanical-design": {
+        title: "Mechanical Design Foundations",
+        lens: "design requirements, component behavior, and engineering trade-offs",
+        assignment: "Apply the proposed focus to a mechanical component design and explain the design trade-offs."
+      },
+      thermodynamics: {
+        title: "Applied Thermodynamics",
+        lens: "energy balances, thermal system behavior, and efficiency",
+        assignment: "Apply the proposed focus to a thermal-system case and explain the energy and performance trade-offs."
+      },
+      manufacturing: {
+        title: "Manufacturing Processes",
+        lens: "process selection, production constraints, quality, and repeatability",
+        assignment: "Apply the proposed focus to a manufacturing case and explain the process and quality trade-offs."
+      },
+      robotics: {
+        title: "Robotics and Mechatronics",
+        lens: "mechanisms, sensors, actuation, control, and safe operation",
+        assignment: "Apply the proposed focus to a robotic system and explain its mechanical and control decisions."
+      },
+      materials: {
+        title: "Materials and Testing",
+        lens: "material behavior, testing methods, evidence, and performance",
+        assignment: "Apply the proposed focus to a material selection or test case and justify the evidence required."
+      }
+    };
+
+    function currentCourse() {
+      return courseContexts[studioCourseSelect.value];
+    }
+
+    function syncStudioInputs() {
+      studentSelect.value = studioStudentSelect.value;
+      demandSelect.value = studioDemandSelect.value;
+      hrSourceInput.value = studioSourceSelect.value;
+      const demandSignal = currentStudent().demand[demandSelect.value];
+      hrDemandInput.value = String(demandSignal.percent);
+      const skillsByDemand = {
+        simulation: "CAD, FEA and simulation",
+        energy: "Energy systems and efficiency",
+        automation: "Controls and industrial automation"
+      };
+      hrSkillInput.value = skillsByDemand[demandSelect.value];
+      const countsBySource = {
+        LinkedIn: 34,
+        Indeed: 22,
+        "Bicocca Career Service": 12,
+        "Other approved source": 10,
+        "Combined sources": 68
+      };
+      hrPostingCountInput.value = String(countsBySource[studioSourceSelect.value]);
+      importedHrSnapshot = null;
+      hrSignalReviewed = false;
+      return demandSignal;
+    }
+
+    function updateStudioSourceSummary() {
+      const student = currentStudent();
+      const signal = currentHrSignal();
+      const studentPercent = document.getElementById("student-source-count");
+      const studentDetail = document.getElementById("student-source-detail");
+      const hrCount = document.getElementById("hr-source-count");
+      const hrDetail = document.getElementById("hr-source-detail");
+      const hrSkill = document.getElementById("hr-skill-summary");
+      const studentInterests = importedStudentSnapshot?.interests || [];
+      if (studentPercent) {
+        studentPercent.textContent = importedStudentSnapshot
+          ? `${studentInterests.length} interests shared`
+          : "Demo snapshot · 1 profile";
+      }
+      if (studentDetail) {
+        studentDetail.textContent = importedStudentSnapshot
+          ? `Student questionnaire · ${studentInterests.map(item => item.title).join(", ")}`
+          : "Student questionnaire · fictional";
+      }
+      if (hrCount && signal) {
+        hrCount.textContent = `${signal.postingCount} ${importedHrSnapshot ? "imported postings" : "example postings"}`;
+      }
+      if (hrDetail) {
+        hrDetail.textContent = importedHrSnapshot
+          ? `HR intake · ${signal.source}`
+          : "HR intake · fictional";
+      }
+      if (hrSkill && signal) hrSkill.textContent = signal.skillFocus;
+      if (studioSourceStatus && signal) {
+        const studentSource = importedStudentSnapshot ? "imported student profile" : "fictional student snapshot";
+        const hrSource = importedHrSnapshot
+          ? `${signal.source} import (${signal.postingCount} postings)`
+          : `${signal.source} fictional snapshot`;
+        studioSourceStatus.textContent = `Inputs ready: ${studentSource} + ${hrSource}. Select a course and analyze its syllabus to draft a focused lecture.`;
+      }
+    }
+
+    function themeToStudentInterest(theme) {
+      const mapping = {
+        design: "design",
+        automation: "automation",
+        energy: "mobility",
+        materials: "design",
+        manufacturing: "automation",
+        analytics: "design"
+      };
+      return mapping[theme] || null;
+    }
+
+    async function importStudentProfile(file) {
+      if (!file) return;
+      if (file.size > 1024 * 1024) {
+        studioSourceStatus.textContent = "Student profile file is too large (maximum 1 MB).";
+        document.getElementById("student-snapshot-file").value = "";
+        return;
+      }
+      try {
+        const payload = JSON.parse(await file.text());
+        const allowedThemes = new Set(["design", "automation", "energy", "materials", "manufacturing", "analytics"]);
+        if (
+          !payload ||
+          payload.product !== "BSP AI" ||
+          payload.type !== "student-interest-snapshot" ||
+          !Array.isArray(payload.interests) ||
+          payload.interests.length === 0 ||
+          payload.interests.some(item =>
+            !item ||
+            typeof item.theme !== "string" ||
+            !allowedThemes.has(item.theme) ||
+            typeof item.title !== "string" ||
+            !Number.isFinite(item.score)
+          )
+        ) {
+          throw new Error("Choose a BSP AI student-interest profile JSON exported from the questionnaire.");
+        }
+        importedStudentSnapshot = {
+          interests: payload.interests.slice(0, 3),
+          exportedAt: typeof payload.exported_at === "string" ? payload.exported_at : ""
+        };
+        const topInterest = themeToStudentInterest(importedStudentSnapshot.interests[0].theme);
+        if (!topInterest) throw new Error("The student profile has no supported interest themes.");
+        studentSelect.value = topInterest;
+        studioStudentSelect.value = topInterest;
+        invalidateSyllabusAnalysis();
+        renderScenario();
+        studioSourceStatus.textContent = `Imported ${importedStudentSnapshot.interests.length} student interest${importedStudentSnapshot.interests.length === 1 ? "" : "s"}. Select a course and analyze its syllabus to draft a focused lecture.`;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Could not read the student profile.";
+        studioSourceStatus.textContent = importedStudentSnapshot
+          ? `${message} The previous valid student profile remains active.`
+          : message;
+      } finally {
+        document.getElementById("student-snapshot-file").value = "";
+      }
+    }
+
+    function inferDemandCategory(skills) {
+      const text = skills.join(" ").toLowerCase();
+      const categoryScores = {
+        simulation: (text.match(/\b(cad|fea|cfd|simulation|solidworks|catia|ansys)\b/g) || []).length,
+        energy: (text.match(/\b(energy|thermodynamics|thermal|hvac|renewable|efficiency)\b/g) || []).length,
+        automation: (text.match(/\b(robot|robotics|plc|automation|control|mechatronics|sensor)\b/g) || []).length
+      };
+      return Object.entries(categoryScores)
+        .sort((left, right) => right[1] - left[1])
+        .find(([, score]) => score > 0)?.[0] || "simulation";
+    }
+
+    function normalizeImportedSource(sourceCounts) {
+      const sorted = [...sourceCounts.entries()].sort((left, right) => right[1] - left[1]);
+      if (sorted.length === 0) return "Combined sources";
+      if (sorted.length > 1 && sorted[0][1] === sorted[1][1]) return "Combined sources";
+      const source = sorted[0][0];
+      return ["LinkedIn", "Indeed", "Bicocca Career Service"].includes(source)
+        ? source
+        : "Other approved source";
+    }
+
+    async function importHrDataset(file) {
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        studioSourceStatus.textContent = "HR dataset is too large (maximum 5 MB).";
+        document.getElementById("hr-snapshot-file").value = "";
+        return;
+      }
+      try {
+        const payload = JSON.parse(await file.text());
+        if (
+          !payload ||
+          payload.product !== "BSP AI" ||
+          payload.dataset !== "bicocca_mechanical_engineering_job_market" ||
+          !Array.isArray(payload.records) ||
+          payload.records.length === 0 ||
+          payload.records.length > 5000
+        ) {
+          throw new Error("Choose a normalized BSP AI HR job-market JSON export from the HR intake.");
+        }
+        const sourceCounts = new Map();
+        const skillCounts = new Map();
+        const roleCounts = new Map();
+        payload.records.forEach((record, index) => {
+          if (
+            !record ||
+            typeof record.source !== "string" ||
+            typeof record.role_title !== "string" ||
+            !Array.isArray(record.skills) ||
+            record.skills.length === 0 ||
+            record.skills.some(skill => typeof skill !== "string" || !skill.trim())
+          ) {
+            throw new Error(`HR record ${index + 1} is missing a source, role, or skills list.`);
+          }
+          sourceCounts.set(record.source, (sourceCounts.get(record.source) || 0) + 1);
+          roleCounts.set(record.role_title, (roleCounts.get(record.role_title) || 0) + 1);
+          new Set(record.skills.map(skill => skill.trim())).forEach(skill => {
+            skillCounts.set(skill, (skillCounts.get(skill) || 0) + 1);
+          });
+        });
+
+        const rankedSkills = [...skillCounts.entries()]
+          .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]));
+        const topSkills = rankedSkills.slice(0, 3).map(([skill]) => skill);
+        const category = inferDemandCategory(topSkills);
+        const source = normalizeImportedSource(sourceCounts);
+        const topRole = [...roleCounts.entries()].sort((left, right) => right[1] - left[1])[0][0];
+        const roleOption = [...hrRoleInput.options].find(option =>
+          option.value.toLowerCase() === topRole.toLowerCase()
+        );
+
+        importedHrSnapshot = {
+          recordCount: payload.records.length,
+          sourceCounts: [...sourceCounts.entries()],
+          skills: rankedSkills.slice(0, 100).map(([skill, count]) => ({ skill, count })),
+          exportedAt: typeof payload.exported_at === "string" ? payload.exported_at : ""
+        };
+        demandSelect.value = category;
+        studioDemandSelect.value = category;
+        hrSourceInput.value = source;
+        studioSourceSelect.value = source;
+        hrSkillInput.value = topSkills.join(", ").slice(0, 70);
+        hrPostingCountInput.value = String(payload.records.length);
+        hrDemandInput.value = String(Math.round((rankedSkills[0][1] / payload.records.length) * 100));
+        if (roleOption) hrRoleInput.value = roleOption.value;
+        hrReviewNoteInput.value = "Imported HR-normalized posting data. Review skill normalization and course relevance before using this signal.";
+        hrSignalReviewed = true;
+        invalidateSyllabusAnalysis();
+        renderScenario();
+        studioSourceStatus.textContent = `Imported ${payload.records.length} HR postings. Most frequent skills are ${topSkills.join(", ")}. Analyze the course syllabus to review market-aligned lecture ideas.`;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Could not read the HR dataset.";
+        studioSourceStatus.textContent = importedHrSnapshot
+          ? `${message} The previous valid HR dataset remains active.`
+          : message;
+      } finally {
+        document.getElementById("hr-snapshot-file").value = "";
+      }
+    }
+
+    const topicAliases = {
+      cad: ["cad", "computer aided design", "solidworks", "catia"],
+      simulation: ["simulation", "fea", "finite element", "ansys", "cfd", "stress analysis"],
+      energy: ["energy", "efficiency", "thermodynamic", "thermal", "heat transfer", "hvac", "renewable"],
+      automation: ["robot", "robotics", "plc", "automation", "control", "mechatronic", "sensor", "actuator"],
+      manufacturing: ["manufactur", "production", "cnc", "machining", "process selection", "quality"],
+      materials: ["material", "fatigue", "composite", "metallurgy", "testing", "tensile"],
+      mechanics: ["mechanic", "statics", "dynamics", "kinematic", "force", "motion", "component", "mechanism"],
+      design: ["design", "drawing", "product"]
+    };
+    const studentThemeConcepts = {
+      design: ["design", "cad", "simulation", "materials"],
+      automation: ["automation", "mechanics", "manufacturing"],
+      energy: ["energy", "mechanics"],
+      materials: ["materials", "simulation"],
+      manufacturing: ["manufacturing", "automation"],
+      analytics: ["simulation", "energy"]
+    };
+    const demoInterestConcepts = {
+      mobility: ["energy", "mechanics", "automation"],
+      design: ["design", "cad", "simulation", "materials"],
+      automation: ["automation", "mechanics", "manufacturing"]
+    };
+
+    function normalizedTopicText(value) {
+      return ` ${value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ")} `;
+    }
+
+    function conceptsIn(value) {
+      const text = normalizedTopicText(value);
+      return Object.entries(topicAliases)
+        .filter(([, aliases]) => aliases.some(alias => text.includes(normalizedTopicText(alias))))
+        .map(([concept]) => concept);
+    }
+
+    function shareTopicConcept(left, right) {
+      const rightText = normalizedTopicText(right);
+      if (rightText.trim() && normalizedTopicText(left).includes(rightText.trim())) return true;
+      const rightConcepts = new Set(conceptsIn(right));
+      return conceptsIn(left).some(concept => rightConcepts.has(concept));
+    }
+
+    function invalidateSyllabusAnalysis() {
+      document.getElementById("syllabus-results").replaceChildren();
+      document.getElementById("syllabus-proposal").hidden = true;
+      analyzedSyllabus = null;
+      const status = document.getElementById("syllabus-status");
+      status.textContent = "Syllabus or inputs changed. Analyze again to refresh the comparison.";
+      status.className = "workspace-status";
+      document.getElementById("implementation-status").textContent = "Reanalyze the syllabus after changing an input before generating another lecture preview.";
+    }
+
+    const mandatoryFoundationRules = [
+      {
+        subject: "Mathematics",
+        pattern: /\bmath(?:ematics|s)?\b/i
+      },
+      {
+        subject: "Physics",
+        pattern: /\bphysics\b/i
+      }
+    ];
+
+    function mandatoryFoundationFor(title) {
+      return mandatoryFoundationRules.find(rule => rule.pattern.test(title))?.subject || "";
+    }
+
+    function analyzeSyllabus() {
+      const inputLectures = document.getElementById("syllabus-input").value
+        .split(/\r?\n/)
+        .map(value => value.trim().replace(/^(?:lecture|week|module|unit)\s*\d+\s*[:.)-]?\s*/i, ""))
+        .filter(Boolean);
+      const results = document.getElementById("syllabus-results");
+      results.replaceChildren();
+      if (inputLectures.length === 0) {
+        document.getElementById("syllabus-proposal").hidden = true;
+        document.getElementById("syllabus-status").textContent = "Paste at least one lecture or module title before analyzing the syllabus.";
+        document.getElementById("syllabus-status").className = "workspace-status error";
+        return;
+      }
+
+      const providedFoundations = inputLectures.filter(title => mandatoryFoundationFor(title));
+      const otherLectures = inputLectures.filter(title => !mandatoryFoundationFor(title));
+      const analyzedOtherLectureCount = Math.min(otherLectures.length, 100);
+      const reviewedInputCount = providedFoundations.length + analyzedOtherLectureCount;
+      const lectures = [
+        ...providedFoundations,
+        ...otherLectures.slice(0, analyzedOtherLectureCount)
+      ];
+      const importedMarket = Boolean(importedHrSnapshot);
+      const marketSkills = importedMarket
+        ? importedHrSnapshot.skills
+        : [...new Set(hrSkillInput.value.split(/[,;]+/).map(value => value.trim()).filter(Boolean))]
+            .map(skill => ({ skill, count: 0 }));
+      const studentSignals = importedStudentSnapshot
+        ? importedStudentSnapshot.interests.map(interest => ({
+            title: interest.title,
+            concepts: studentThemeConcepts[interest.theme] || []
+          }))
+        : [{
+            title: studioStudentSelect.selectedOptions[0].textContent,
+            concepts: demoInterestConcepts[studioStudentSelect.value] || []
+          }];
+
+      const coveredSkills = new Set();
+      let priorityCount = 0;
+      const lectureResults = lectures.map(title => {
+        const mandatoryFoundation = Boolean(mandatoryFoundationFor(title));
+        const matchedSkills = mandatoryFoundation
+          ? []
+          : marketSkills.filter(entry => shareTopicConcept(title, entry.skill));
+        matchedSkills.forEach(entry => coveredSkills.add(entry.skill));
+        const studentMatches = mandatoryFoundation ? [] : studentSignals.filter(interest =>
+          interest.concepts.some(concept => conceptsIn(title).includes(concept)) ||
+          shareTopicConcept(title, interest.title)
+        );
+        const strongestSkill = matchedSkills
+          .slice()
+          .sort((left, right) => right.count - left.count)[0];
+        const prevalence = importedMarket && strongestSkill
+          ? Math.round((strongestSkill.count / importedHrSnapshot.recordCount) * 100)
+          : 0;
+        const priority = importedMarket && prevalence >= 25;
+        const augment = importedMarket && matchedSkills.length > 0 && prevalence < 25;
+        if (priority) priorityCount += 1;
+        return {
+          title,
+          matchedSkills: matchedSkills.slice(0, 4),
+          studentMatches,
+          strongestSkill,
+          prevalence,
+          priority,
+          augment,
+          mandatoryFoundation
+        };
+      });
+
+      const summary = document.createElement("div");
+      summary.className = "syllabus-summary";
+      const detectedFoundations = [...new Set(providedFoundations.map(mandatoryFoundationFor))];
+      const foundationSummary = detectedFoundations.length
+        ? ` Detected protected foundation${detectedFoundations.length === 1 ? "" : "s"}: ${detectedFoundations.join(" and ")}.`
+        : "";
+      summary.textContent = importedMarket
+        ? `Reviewed ${reviewedInputCount} of ${inputLectures.length} syllabus titles against ${importedHrSnapshot.recordCount} imported postings. ${priorityCount} other lecture${priorityCount === 1 ? "" : "s"} show a strong signal in this sample.${foundationSummary} Results are keyword/concept matches, not a curriculum quality score.`
+        : `Reviewed ${reviewedInputCount} of ${inputLectures.length} syllabus titles against the selected fictional HR example. Import normalized HR data for evidence-based sample counts; demo matches are illustrative only.${foundationSummary}`;
+      results.append(summary);
+
+      lectureResults.forEach(result => {
+        const card = document.createElement("article");
+        card.className = "syllabus-lecture";
+        const details = document.createElement("div");
+        const title = document.createElement("h4");
+        title.textContent = result.title;
+        details.append(title);
+        const marketDetail = document.createElement("p");
+        if (result.mandatoryFoundation) {
+          marketDetail.textContent = "Mandatory foundational subject. Protected from market-based removal, renaming, or reprioritization.";
+        } else if (result.matchedSkills.length) {
+          const names = result.matchedSkills.map(item => item.skill).join(", ");
+          marketDetail.textContent = importedMarket
+            ? `Matched HR skill${result.matchedSkills.length === 1 ? "" : "s"}: ${names}. Strongest signal: ${result.strongestSkill.count} of ${importedHrSnapshot.recordCount} postings (${result.prevalence}%) mentioned "${result.strongestSkill.skill}".`
+            : `Demo HR concepts matched: ${names}. No imported posting evidence is available.`;
+        } else {
+          marketDetail.textContent = importedMarket
+            ? "No direct match found among the skills in the imported posting sample."
+            : "No direct match found in the selected fictional HR example.";
+        }
+        details.append(marketDetail);
+        const studentDetail = document.createElement("p");
+        studentDetail.textContent = result.mandatoryFoundation
+          ? "Student and HR signals may inform optional examples only; foundational subject content remains unchanged."
+          : result.studentMatches.length
+            ? `Student interest connection: ${result.studentMatches.map(interest => interest.title).join(", ")}.`
+            : "No direct match found with the selected student-interest snapshot.";
+        details.append(studentDetail);
+
+        const decision = document.createElement("span");
+        decision.className = `syllabus-decision${result.mandatoryFoundation ? " mandatory" : result.priority ? " priority" : result.augment || !result.matchedSkills.length ? " review" : ""}`;
+        if (result.mandatoryFoundation) {
+          decision.textContent = "Mandatory foundation · unchanged";
+        } else if (!importedMarket) {
+          decision.textContent = result.matchedSkills.length ? "Demo alignment · verify with HR data" : "Review with faculty";
+        } else if (result.priority) {
+          decision.textContent = "Prioritize applied coverage";
+        } else if (result.augment) {
+          decision.textContent = "Consider an applied example";
+        } else {
+          decision.textContent = result.matchedSkills.length
+            ? "Faculty review · limited signal"
+            : "No HR match · faculty review";
+        }
+        card.append(details, decision);
+        results.append(card);
+      });
+
+      let uncoveredSkills = [];
+      if (importedMarket) {
+        uncoveredSkills = importedHrSnapshot.skills
+          .filter(entry => !coveredSkills.has(entry.skill))
+          .sort((left, right) => right.count - left.count)
+          .slice(0, 5);
+        if (uncoveredSkills.length) {
+          const uncovered = document.createElement("div");
+          uncovered.className = "syllabus-summary";
+          uncovered.textContent = `Frequently listed HR skills not matched to these syllabus titles: ${uncoveredSkills.map(entry => `${entry.skill} (${entry.count}/${importedHrSnapshot.recordCount})`).join(", ")}. Consider whether they fit the course or belong elsewhere in the program.`;
+          results.append(uncovered);
+        }
+      }
+      if (otherLectures.length > analyzedOtherLectureCount) {
+        const limitNote = document.createElement("div");
+        limitNote.className = "syllabus-summary";
+        limitNote.textContent = `Only the first ${analyzedOtherLectureCount} non-foundation syllabus titles were analyzed. Mathematics and physics foundation titles remain protected and are all included.`;
+        results.append(limitNote);
+      }
+
+      const status = document.getElementById("syllabus-status");
+      status.textContent = detectedFoundations.length
+        ? `Analysis complete. Detected ${detectedFoundations.join(" and ")} as protected mandatory foundation${detectedFoundations.length === 1 ? "" : "s"}; these titles are excluded from market prioritization. Low or absent signals for other lectures indicate limited sample alignment, not that they are academically unnecessary.`
+        : "Analysis complete. Low or absent market signals indicate limited alignment in this sample—not that a lecture is academically unnecessary.";
+      status.className = "workspace-status success";
+      renderSyllabusProposal(lectureResults, uncoveredSkills, importedMarket);
+    }
+
+    function renderSyllabusProposal(lectureResults, uncoveredSkills, importedMarket) {
+      const proposal = document.getElementById("syllabus-proposal");
+      const list = document.getElementById("proposed-syllabus-list");
+      const selector = document.getElementById("implementation-lecture");
+      const additionSkill = uncoveredSkills[0]?.skill || (!importedMarket ? hrSkillInput.value.trim() : "");
+      analyzedSyllabus = { lectureResults, additionSkill, importedMarket };
+      list.replaceChildren();
+      selector.replaceChildren();
+
+      lectureResults.forEach((result, index) => {
+        const item = document.createElement("li");
+        item.append(document.createTextNode(result.title));
+        const note = document.createElement("span");
+        note.className = `syllabus-item-note${result.mandatoryFoundation ? " mandatory" : ""}`;
+        if (result.mandatoryFoundation) {
+          note.textContent = "Mandatory foundational subject · retained unchanged regardless of HR or student signals.";
+        } else if (result.priority) {
+          note.textContent = `Keep and prioritize applied coverage · ${result.strongestSkill.skill}: ${result.prevalence}% of imported postings.`;
+        } else if (result.matchedSkills.length) {
+          note.textContent = importedMarket
+            ? `Keep; consider an applied example for ${result.matchedSkills.map(skill => skill.skill).join(", ")}.`
+            : "Keep; illustrative demo match only. Validate against imported HR data.";
+        } else {
+          note.textContent = "Keep as part of the current subject; no direct match is not a reason to remove it.";
+        }
+        item.append(note);
+        list.append(item);
+
+        const option = document.createElement("option");
+        option.value = `lecture:${index}`;
+        option.textContent = result.title;
+        selector.append(option);
+      });
+
+      if (additionSkill) {
+        const addition = document.createElement("li");
+        addition.append(document.createTextNode(`Proposed applied lecture: ${additionSkill} in ${currentCourse().title}`));
+        const note = document.createElement("span");
+        note.className = "syllabus-item-note addition";
+        note.textContent = importedMarket
+          ? `Suggested from ${uncoveredSkills[0]?.count || 0} of ${importedHrSnapshot.recordCount} postings; faculty should confirm it belongs in this subject.`
+          : "Illustrative demo suggestion only; import HR data to verify demand before considering it.";
+        addition.append(note);
+        list.append(addition);
+
+        const option = document.createElement("option");
+        option.value = "new-applied-lecture";
+        option.textContent = `Proposed applied lecture: ${additionSkill}`;
+        selector.append(option);
+        selector.value = "new-applied-lecture";
+      }
+
+      document.getElementById("syllabus-proposal-summary").textContent = importedMarket
+        ? `A draft arrangement based on ${importedHrSnapshot.recordCount} imported postings and the current student-interest snapshot. Existing lectures are retained; market evidence suggests where to add applied coverage.`
+        : "A demonstration arrangement using fictional HR signals and the selected student snapshot. Existing lectures are retained; confirm all market suggestions with approved HR data.";
+      document.getElementById("implementation-status").textContent = "Choose an existing lecture or the proposed applied lecture, then generate an editable teacher preview.";
+      proposal.hidden = false;
+    }
+
+    function generateLectureImplementation() {
+      if (!analyzedSyllabus) {
+        document.getElementById("implementation-status").textContent = "Analyze the syllabus before generating a lecture implementation.";
+        document.getElementById("implementation-status").className = "workspace-status error";
+        return;
+      }
+      const selection = document.getElementById("implementation-lecture").value;
+      const isAddition = selection === "new-applied-lecture";
+      const selectedResult = isAddition
+        ? null
+        : analyzedSyllabus.lectureResults[Number(selection.split(":")[1])];
+      if (!isAddition && !selectedResult) {
+        document.getElementById("implementation-status").textContent = "Select a valid lecture from the analyzed syllabus.";
+        document.getElementById("implementation-status").className = "workspace-status error";
+        return;
+      }
+
+      const course = currentCourse();
+      const studentInterests = importedStudentSnapshot
+        ? importedStudentSnapshot.interests.map(interest => interest.title)
+        : [studioStudentSelect.selectedOptions[0].textContent];
+      const studentInterest = studentInterests.join("; ");
+      const isMandatoryFoundation = Boolean(selectedResult?.mandatoryFoundation);
+      const matchedSkills = selectedResult?.matchedSkills.map(item => item.skill) || [];
+      const skillFocus = isAddition
+        ? analyzedSyllabus.additionSkill
+        : matchedSkills.length
+          ? matchedSkills.join(", ")
+          : hrSkillInput.value.trim();
+      const lectureTitle = isAddition
+        ? `Applied ${skillFocus} for ${course.title}`
+        : selectedResult.title;
+      const sourceNote = analyzedSyllabus.importedMarket
+        ? `Skill focus: ${skillFocus}, identified in the imported ${hrSourceInput.value} posting sample.`
+        : `Illustrative skill focus: ${skillFocus}; validate against an approved HR dataset.`;
+
+      if (isMandatoryFoundation) {
+        const foundationFocus = mandatoryFoundationFor(selectedResult.title);
+        teacherTitleInput.value = selectedResult.title;
+        teacherTitleInput.readOnly = true;
+        teacherOutcomesInput.value = [
+          `Build and retain the core ${foundationFocus.toLowerCase()} knowledge represented by ${selectedResult.title}.`,
+          `Explain foundational methods and assumptions without replacing the subject's required content.`,
+          `Connect the foundation to a future engineering application through an optional example.`
+        ].join("\n");
+        teacherTopicsInput.value = [
+          `Required foundation: ${selectedResult.title} (retain as provided)`,
+          `Core ${foundationFocus.toLowerCase()} principles and methods`,
+          `Optional engineering application: ${studentInterest}`,
+          "Application examples supplement the foundation; they do not replace or reduce it."
+        ].join("\n");
+        teacherAssignmentInput.value = `Preserve the required ${foundationFocus.toLowerCase()} syllabus and core learning outcomes. Add an optional example connecting its methods to ${studentInterest}. Market signal for context only: ${skillFocus}. ${sourceNote}`;
+      } else {
+        teacherTitleInput.value = isAddition
+          ? lectureTitle
+          : `${course.title} · ${lectureTitle}`;
+        teacherTitleInput.readOnly = false;
+        teacherOutcomesInput.value = [
+          `Explain the core concepts and assumptions in ${lectureTitle}.`,
+          `Apply ${skillFocus} to a ${studentInterest.toLowerCase()}-related engineering case.`,
+          "Compare design alternatives using evidence, performance constraints, and stated limitations."
+        ].join("\n");
+        teacherTopicsInput.value = [
+          `Key principles and assumptions: ${lectureTitle}`,
+          `Engineering application of ${skillFocus}`,
+          `Connect the lecture to ${studentInterest}`,
+          `Evaluate alternatives using ${course.lens}`
+        ].join("\n");
+        teacherAssignmentInput.value = `${course.assignment} Develop a short case applying ${skillFocus} to ${studentInterest}. ${sourceNote}`;
+      }
+      savedDraftAvailable = false;
+      updateTeacherPreview();
+      teacherWorkspaceStatus.textContent = isMandatoryFoundation
+        ? "Foundation teaching preview generated. Mathematics and physics remain required and unchanged; this draft adds only optional application examples. Review before saving."
+        : "Lecture implementation generated from the analyzed syllabus, student snapshot, and HR input. Edit and review it before saving.";
+      teacherWorkspaceStatus.className = "workspace-status success";
+      const implementationStatus = document.getElementById("implementation-status");
+      implementationStatus.textContent = isMandatoryFoundation
+        ? `Teacher preview prepared for "${lectureTitle}". Its mandatory subject and core content stay unchanged; any market connection is supplementary.`
+        : `Teacher preview prepared for "${lectureTitle}". Review or edit the outcomes, topics, and activity in the lecture editor below.`;
+      implementationStatus.className = "workspace-status success";
+      document.getElementById("teacher-preview").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function currentStudent() {
+      return scenarios[studentSelect.value];
+    }
+
+    function currentBaseProposal() {
+      return currentStudent().demand[demandSelect.value];
+    }
+
+    function currentHrSignal() {
+      const base = currentBaseProposal();
+      const skillFocus = hrSkillInput.value.trim();
+      const postingCount = Number(hrPostingCountInput.value);
+      const priority = Number(hrDemandInput.value);
+      if (!skillFocus || !Number.isInteger(postingCount) || postingCount < 1 || postingCount > 5000) {
+        return null;
+      }
+      return {
+        role: hrRoleInput.value,
+        source: hrSourceInput.value,
+        skillFocus,
+        postingCount,
+        priority,
+        reviewNote: hrReviewNoteInput.value.trim(),
+        base
+      };
+    }
+
+    function clearSavedHrSignal() {
+      try {
+        window.localStorage.removeItem(hrStorageKey);
+        return "";
+      } catch (error) {
+        return error instanceof Error
+          ? ` Could not clear the browser-local HR signal: ${error.message}`
+          : " Could not clear the browser-local HR signal.";
+      }
+    }
+
+    function restoreSavedHrSignal() {
+      try {
+        const stored = window.localStorage.getItem(hrStorageKey);
+        if (!stored) return false;
+        const signal = JSON.parse(stored);
+        if (!signal || typeof signal !== "object") {
+          throw new Error("Saved HR signal has an invalid format.");
+        }
+        const source = signal.source.replace(" · fictional sample", "");
+        const validDemand = ["simulation", "energy", "automation"].includes(signal.demand);
+        const validRole = [...hrRoleInput.options].some(option => option.value === signal.role);
+        const validSource = [...hrSourceInput.options].some(option => option.value === source);
+        if (
+          !validDemand ||
+          !validRole ||
+          !validSource ||
+          typeof signal.skillFocus !== "string" ||
+          !signal.skillFocus.trim() ||
+          !Number.isInteger(signal.postingCount) ||
+          signal.postingCount < 1 ||
+          signal.postingCount > 5000 ||
+          !Number.isInteger(signal.priority) ||
+          signal.priority < 0 ||
+          signal.priority > 100 ||
+          typeof signal.reviewNote !== "string"
+        ) {
+          throw new Error("Saved HR signal has an invalid format.");
+        }
+        demandSelect.value = signal.demand;
+        hrRoleInput.value = signal.role;
+        hrSourceInput.value = source;
+        studioSourceSelect.value = source;
+        hrSkillInput.value = signal.skillFocus;
+        hrPostingCountInput.value = String(signal.postingCount);
+        hrDemandInput.value = String(signal.priority);
+        hrReviewNoteInput.value = signal.reviewNote;
+        hrSignalReviewed = true;
+        hrWorkspaceStatus.textContent = "Restored the reviewed HR demo signal from this browser.";
+        hrWorkspaceStatus.className = "workspace-status success";
+        return true;
+      } catch (error) {
+        hrWorkspaceStatus.textContent = error instanceof Error
+          ? `${error.message} Reset the HR example to continue.`
+          : "Could not read the saved HR signal.";
+        hrWorkspaceStatus.className = "workspace-status error";
+        return false;
+      }
+    }
+
+    function renderList(elementId, values, emptyMessage) {
+      const list = document.getElementById(elementId);
+      list.replaceChildren();
+      const entries = values.filter(value => value.trim());
+      if (entries.length === 0) {
+        const empty = document.createElement("li");
+        empty.textContent = emptyMessage;
+        list.append(empty);
+        return;
+      }
+      entries.forEach(value => {
+        const item = document.createElement("li");
+        item.textContent = value;
+        list.append(item);
+      });
+    }
+
+    function currentTeacherDraft() {
+      return {
+        course: studioCourseSelect.value,
+        title: teacherTitleInput.value.trim(),
+        outcomes: teacherOutcomesInput.value.split(/\r?\n/).map(value => value.trim()).filter(Boolean),
+        topics: teacherTopicsInput.value.split(/\r?\n/).map(value => value.trim()).filter(Boolean),
+        assignment: teacherAssignmentInput.value.trim()
+      };
+    }
+
+    function updateTeacherPreview() {
+      const draft = currentTeacherDraft();
+      document.getElementById("preview-course-title").textContent = draft.title || "Untitled teaching draft";
+      renderList("preview-outcomes", draft.outcomes, "Add at least one learning outcome.");
+      renderList("preview-topics", draft.topics, "Add a teaching topic.");
+      document.getElementById("preview-assignment").textContent = draft.assignment || "Add an applied activity or assignment.";
+      if (savedDraftAvailable) {
+        teacherWorkspaceStatus.textContent = "You have a saved local draft. New edits are not saved until you choose Save teaching draft.";
+        teacherWorkspaceStatus.className = "workspace-status";
+      } else {
+        teacherWorkspaceStatus.textContent = "Live preview · changes are not saved until you choose Save teaching draft.";
+        teacherWorkspaceStatus.className = "workspace-status";
+      }
+    }
+
+    function populateTeacherDraftFromProposal() {
+      const student = currentStudent();
+      const signal = currentHrSignal();
+      if (!signal) {
+        teacherWorkspaceStatus.textContent = "Complete the HR skill focus and posting count before using the proposal.";
+        teacherWorkspaceStatus.className = "workspace-status error";
+        return;
+      }
+      const studentInterests = importedStudentSnapshot
+        ? importedStudentSnapshot.interests.map(interest => interest.title)
+        : [studioStudentSelect.selectedOptions[0].textContent];
+      const studentInterest = studentInterests.join("; ");
+      const course = currentCourse();
+      teacherTitleInput.value = `${course.title}: ${signal.base.title}`;
+      teacherTitleInput.readOnly = false;
+      teacherOutcomesInput.value = [
+        `Apply the principles of ${course.title} to a problem related to ${studentInterest.toLowerCase()}.`,
+        `Use ${signal.skillFocus} to investigate and compare engineering alternatives through ${course.lens}.`,
+        "Explain assumptions, evidence, and limitations when presenting a design decision."
+      ].join("\n");
+      teacherTopicsInput.value = [signal.skillFocus, ...signal.base.topics, `Course connection: ${course.lens}.`].join("\n");
+      teacherAssignmentInput.value = `${course.assignment} ${signal.base.project} Student interest input: ${studentInterest}.`;
+      savedDraftAvailable = false;
+      updateTeacherPreview();
+      teacherWorkspaceStatus.textContent = "A guided teaching draft was generated from the selected course, student snapshot, and HR signal. Review and edit it before saving.";
+      teacherWorkspaceStatus.className = "workspace-status success";
+      const postingLabel = importedHrSnapshot ? "imported postings" : "fictional postings";
+      studioSourceStatus.textContent = `Draft generated for ${course.title} using ${importedStudentSnapshot ? "the imported student profile" : "the example student snapshot"} and ${signal.source} (${signal.postingCount} ${postingLabel}).`;
+    }
+
+    function renderScenario() {
+      const student = currentStudent();
+      const proposal = currentBaseProposal();
+      const signal = currentHrSignal();
+      const skillFocus = signal ? signal.skillFocus : "Add an HR skill focus";
+      const postingPriority = signal ? signal.priority : 0;
+      const reviewNote = signal ? signal.reviewNote : "";
+      const proposalTags = signal
+        ? [signal.skillFocus, ...proposal.tags.filter(tag => !tag.toLowerCase().includes(signal.skillFocus.toLowerCase()))]
+        : proposal.tags;
+      const proposalTopics = signal && !proposal.topics.some(topic => topic.toLowerCase().includes(skillFocus.toLowerCase()))
+        ? [`HR priority: ${skillFocus}`, ...proposal.topics]
+        : proposal.topics;
+
+      document.getElementById("student-percent").textContent = `${student.studentPercent}%`;
+      document.getElementById("student-bar").style.width = `${student.studentPercent}%`;
+      document.getElementById("market-percent").textContent = `${postingPriority}/100`;
+      document.getElementById("market-bar").style.width = `${postingPriority}%`;
+      document.getElementById("baseline-title").textContent = student.baselineTitle;
+      document.getElementById("baseline-copy").textContent = student.baselineCopy;
+      document.getElementById("proposal-title").textContent = proposal.title;
+      document.getElementById("proposal-copy").textContent = signal
+        ? `${proposal.copy} HR focus: ${skillFocus} for ${signal.role}, from ${signal.postingCount} example postings in ${signal.source}. ${reviewNote}`.trim()
+        : proposal.copy;
+      document.getElementById("project-copy").textContent = proposal.project;
+      document.getElementById("hr-demand-value").textContent = String(postingPriority);
+      document.getElementById("hr-demand-value").value = String(postingPriority);
+      document.getElementById("hr-review-state").textContent = hrSignalReviewed
+        ? "HR reviewed · demo only"
+        : "Demo signal · not verified";
+      document.getElementById("hr-review-state").classList.toggle("saved", hrSignalReviewed);
+      document.querySelector(".input-card.market .source-note").textContent = signal
+        ? `${signal.source} · ${signal.postingCount} ${importedHrSnapshot ? "imported postings" : "fictional postings"}`
+        : "Check the HR role and posting count.";
+      updateStudioSourceSummary();
+
+      document.getElementById("baseline-tags").replaceChildren(
+        ...student.foundation.slice(0, 2).map(value => {
+          const tag = document.createElement("span");
+          tag.className = "focus-tag";
+          tag.textContent = value;
+          return tag;
+        })
+      );
+      document.getElementById("proposal-tags").replaceChildren(
+        ...proposalTags.map(value => {
+          const tag = document.createElement("span");
+          tag.className = "focus-tag";
+          tag.textContent = value;
+          return tag;
+        })
+      );
+      renderList("foundation-list", student.foundation, "No foundation topics added.");
+      renderList("tailored-list", proposalTopics, "No HR topics available.");
+    }
+
+    function markHrEditsPending() {
+      hrSignalReviewed = false;
+      hrWorkspaceStatus.textContent = "HR edits pending. Apply the signal to mark this example reviewed and update the proposal.";
+      hrWorkspaceStatus.className = "workspace-status";
+      renderScenario();
+    }
+
+    function resetTeacherEditor() {
+      let storageError = "";
+      try {
+        window.localStorage.removeItem(teacherStorageKey);
+        savedDraftAvailable = false;
+      } catch (error) {
+        storageError = error instanceof Error
+          ? `Could not clear the saved browser-local draft: ${error.message}`
+          : "Could not clear the saved browser-local draft.";
+      }
+      populateTeacherDraftFromProposal();
+      if (storageError) {
+        teacherWorkspaceStatus.textContent = storageError;
+        teacherWorkspaceStatus.className = "workspace-status error";
+      }
+    }
+
+    function loadSavedTeacherDraft() {
+      try {
+        const stored = window.localStorage.getItem(teacherStorageKey);
+        if (!stored) return false;
+        const draft = JSON.parse(stored);
+        if (
+          !draft ||
+          typeof draft.title !== "string" ||
+          !Array.isArray(draft.outcomes) ||
+          !draft.outcomes.every(value => typeof value === "string") ||
+          !Array.isArray(draft.topics) ||
+          !draft.topics.every(value => typeof value === "string") ||
+          typeof draft.assignment !== "string"
+        ) {
+          throw new Error("The saved teaching draft has an invalid format.");
+        }
+        teacherTitleInput.value = draft.title;
+          teacherTitleInput.readOnly = false;
+        if (typeof draft.course === "string" && Object.hasOwn(courseContexts, draft.course)) {
+          studioCourseSelect.value = draft.course;
+        }
+        teacherOutcomesInput.value = draft.outcomes.join("\n");
+        teacherTopicsInput.value = draft.topics.join("\n");
+        teacherAssignmentInput.value = draft.assignment;
+        savedDraftAvailable = true;
+        return true;
+      } catch (error) {
+        teacherWorkspaceStatus.textContent = error instanceof Error
+          ? `${error.message} Reset the editor to continue.`
+          : "Could not read the saved local draft.";
+        teacherWorkspaceStatus.className = "workspace-status error";
+        return false;
+      }
+    }
+
+    studentSelect.addEventListener("change", renderScenario);
+    demandSelect.addEventListener("change", () => {
+      const nextSignal = currentStudent().demand[demandSelect.value];
+      hrDemandInput.value = String(nextSignal.percent);
+      const skillByDemand = {
+        simulation: "CAD, FEA and simulation",
+        energy: "Energy systems and efficiency",
+        automation: "Controls and industrial automation"
+      };
+      hrSkillInput.value = skillByDemand[demandSelect.value];
+      markHrEditsPending();
+    });
+    studioStudentSelect.addEventListener("change", () => {
+      importedStudentSnapshot = null;
+      invalidateSyllabusAnalysis();
+      studentSelect.value = studioStudentSelect.value;
+      renderScenario();
+      studioSourceStatus.textContent = "Student-interest snapshot updated. Reanalyze the syllabus to refresh its recommendations.";
+    });
+    studioDemandSelect.addEventListener("change", () => {
+      syncStudioInputs();
+      invalidateSyllabusAnalysis();
+      renderScenario();
+      studioSourceStatus.textContent = "HR skill-demand snapshot updated. Reanalyze the syllabus to refresh its recommendations.";
+    });
+    studioSourceSelect.addEventListener("change", () => {
+      importedHrSnapshot = null;
+      invalidateSyllabusAnalysis();
+      hrSourceInput.value = studioSourceSelect.value;
+      const countsBySource = {
+        LinkedIn: 34,
+        Indeed: 22,
+        "Bicocca Career Service": 12,
+        "Other approved source": 10,
+        "Combined sources": 68
+      };
+      hrPostingCountInput.value = String(countsBySource[studioSourceSelect.value]);
+      hrSignalReviewed = false;
+      renderScenario();
+      studioSourceStatus.textContent = "HR source snapshot updated. Reanalyze the syllabus to refresh its recommendations.";
+    });
+    studioCourseSelect.addEventListener("change", () => {
+      invalidateSyllabusAnalysis();
+      studioSourceStatus.textContent = `${currentCourse().title} selected. Analyze its syllabus below to create a course-specific lecture preview.`;
+    });
+    document.getElementById("student-snapshot-file").addEventListener("change", event => {
+      importStudentProfile(event.currentTarget.files[0]);
+    });
+    document.getElementById("hr-snapshot-file").addEventListener("change", event => {
+      importHrDataset(event.currentTarget.files[0]);
+    });
+    document.getElementById("analyze-syllabus-button").addEventListener("click", analyzeSyllabus);
+    document.getElementById("generate-lecture-button").addEventListener("click", generateLectureImplementation);
+    document.getElementById("load-example-syllabus-button").addEventListener("click", () => {
+      document.getElementById("syllabus-input").value = [
+        "Engineering drawing and CAD",
+        "Statics and mechanics of materials",
+        "Finite element analysis and simulation",
+        "Thermodynamics and heat transfer",
+        "Manufacturing processes and CNC",
+        "Materials testing and fatigue"
+      ].join("\n");
+      analyzeSyllabus();
+    });
+    document.getElementById("syllabus-file").addEventListener("change", async event => {
+      const fileInput = event.currentTarget;
+      const file = fileInput.files[0];
+      if (!file) return;
+      try {
+        if (file.size > 1024 * 1024) throw new Error("Syllabus file is too large (maximum 1 MB).");
+        const text = await file.text();
+        if (!text.trim()) throw new Error("The syllabus text file is empty.");
+        document.getElementById("syllabus-input").value = text;
+        invalidateSyllabusAnalysis();
+        document.getElementById("syllabus-status").textContent = "Syllabus loaded. Analyze it to compare lecture titles with the current student and HR inputs.";
+      } catch (error) {
+        document.getElementById("syllabus-status").textContent = error instanceof Error
+          ? error.message
+          : "Could not read the syllabus text file.";
+        document.getElementById("syllabus-status").className = "workspace-status error";
+      } finally {
+        fileInput.value = "";
+      }
+    });
+    document.getElementById("syllabus-input").addEventListener("input", invalidateSyllabusAnalysis);
+    [hrRoleInput, hrSourceInput, hrSkillInput, hrPostingCountInput, hrDemandInput, hrReviewNoteInput]
+      .forEach(input => {
+        input.addEventListener("input", () => {
+          invalidateSyllabusAnalysis();
+          markHrEditsPending();
+        });
+        input.addEventListener("change", () => {
+          invalidateSyllabusAnalysis();
+          markHrEditsPending();
+        });
+      });
+    hrDemandInput.addEventListener("input", () => {
+      document.getElementById("hr-demand-value").textContent = hrDemandInput.value;
+    });
+    hrDemandInput.addEventListener("change", () => {
+      document.getElementById("hr-demand-value").textContent = hrDemandInput.value;
+    });
+
+    document.getElementById("apply-hr-button").addEventListener("click", () => {
+      const signal = currentHrSignal();
+      if (!signal) {
+        hrWorkspaceStatus.textContent = "Enter a skill focus and a posting count from 1 to 5,000.";
+        hrWorkspaceStatus.className = "workspace-status error";
+        return;
+      }
+      let saveError = "";
+      try {
+        window.localStorage.setItem(hrStorageKey, JSON.stringify({
+          role: signal.role,
+          source: signal.source,
+          skillFocus: signal.skillFocus,
+          postingCount: signal.postingCount,
+          priority: signal.priority,
+          reviewNote: signal.reviewNote,
+          demand: demandSelect.value
+        }));
+      } catch (error) {
+        saveError = error instanceof Error
+          ? ` Applied for this page only; could not save locally: ${error.message}`
+          : " Applied for this page only; could not save locally.";
+      }
+      hrSignalReviewed = true;
+      hrWorkspaceStatus.textContent = saveError
+        ? `HR signal applied to the current proposal.${saveError}`
+        : `HR example applied and saved in this browser: ${signal.skillFocus} · ${signal.postingCount} fictional postings · priority ${signal.priority}/100.`;
+      hrWorkspaceStatus.className = saveError ? "workspace-status error" : "workspace-status success";
+      renderScenario();
+    });
+
+    document.getElementById("reset-hr-button").addEventListener("click", () => {
+      hrRoleInput.value = "Mechanical Design Engineer";
+      hrSourceInput.value = "LinkedIn";
+      hrSkillInput.value = "CAD, FEA and simulation";
+      hrPostingCountInput.value = "34";
+      hrDemandInput.value = "68";
+      hrReviewNoteInput.value = "Example only: employers value candidates who can use simulation and explain engineering trade-offs.";
+      hrSignalReviewed = false;
+      const clearError = clearSavedHrSignal();
+      hrWorkspaceStatus.textContent = clearError || "HR example reset and removed from this browser. Apply the signal to update the proposal.";
+      hrWorkspaceStatus.className = clearError ? "workspace-status error" : "workspace-status";
+      renderScenario();
+    });
+
+    [teacherTitleInput, teacherOutcomesInput, teacherTopicsInput, teacherAssignmentInput]
+      .forEach(input => input.addEventListener("input", updateTeacherPreview));
+    document.getElementById("use-proposal-button").addEventListener("click", populateTeacherDraftFromProposal);
+    document.getElementById("reset-teacher-button").addEventListener("click", resetTeacherEditor);
+    document.getElementById("save-draft-button").addEventListener("click", () => {
+      const draft = currentTeacherDraft();
+      if (!draft.title || draft.outcomes.length === 0 || draft.topics.length === 0 || !draft.assignment) {
+        teacherWorkspaceStatus.textContent = "Add a title, at least one learning outcome and topic, and an applied assignment before saving.";
+        teacherWorkspaceStatus.className = "workspace-status error";
+        return;
+      }
+      try {
+        window.localStorage.setItem(teacherStorageKey, JSON.stringify(draft));
+        savedDraftAvailable = true;
+        teacherWorkspaceStatus.textContent = "Teaching draft saved in this browser only. It has not been approved or published.";
+        teacherWorkspaceStatus.className = "workspace-status success";
+      } catch (error) {
+        teacherWorkspaceStatus.textContent = error instanceof Error
+          ? `Could not save this browser-local draft: ${error.message}`
+          : "Could not save this browser-local draft.";
+        teacherWorkspaceStatus.className = "workspace-status error";
+      }
+    });
+    document.getElementById("export-draft-button").addEventListener("click", () => {
+      const draft = currentTeacherDraft();
+      if (!draft.title || draft.outcomes.length === 0 || draft.topics.length === 0 || !draft.assignment) {
+        teacherWorkspaceStatus.textContent = "Complete the teaching draft before exporting it.";
+        teacherWorkspaceStatus.className = "workspace-status error";
+        return;
+      }
+      const payload = {
+        product: "BSP AI",
+        type: "unapproved-teaching-draft",
+        exported_at: new Date().toISOString(),
+        inputs: {
+          student_profile_imported: Boolean(importedStudentSnapshot),
+          student_interests: importedStudentSnapshot
+            ? importedStudentSnapshot.interests
+            : [{ title: studioStudentSelect.selectedOptions[0].textContent, source: "fictional demo snapshot" }],
+          hr_dataset_imported: Boolean(importedHrSnapshot),
+          hr_source: hrSourceInput.value,
+          hr_posting_count: Number(hrPostingCountInput.value),
+          hr_skill_focus: hrSkillInput.value.trim(),
+          syllabus_lecture_titles: analyzedSyllabus
+            ? analyzedSyllabus.lectureResults.map(lecture => lecture.title)
+            : [],
+          syllabus_analysis_imported_hr: Boolean(analyzedSyllabus?.importedMarket),
+          protected_foundations_detected: analyzedSyllabus
+            ? [...new Set(analyzedSyllabus.lectureResults.map(lecture => mandatoryFoundationFor(lecture.title)).filter(Boolean))]
+            : []
+        },
+        course_draft: draft
+      };
+      const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "bsp-ai-teaching-draft.json";
+      link.click();
+      URL.revokeObjectURL(url);
+      teacherWorkspaceStatus.textContent = "Teaching draft exported to this device. It is not approved or published.";
+      teacherWorkspaceStatus.className = "workspace-status success";
+    });
+
+    document.getElementById("reset-button").addEventListener("click", () => {
+      studentSelect.value = "mobility";
+      demandSelect.value = "simulation";
+      studioStudentSelect.value = "mobility";
+      studioDemandSelect.value = "simulation";
+      studioSourceSelect.value = "LinkedIn";
+      studioCourseSelect.value = "mechanical-design";
+      hrRoleInput.value = "Mechanical Design Engineer";
+      hrSourceInput.value = "LinkedIn";
+      hrSkillInput.value = "CAD, FEA and simulation";
+      hrPostingCountInput.value = "34";
+      hrDemandInput.value = "68";
+      hrReviewNoteInput.value = "Example only: employers value candidates who can use simulation and explain engineering trade-offs.";
+      importedStudentSnapshot = null;
+      importedHrSnapshot = null;
+      invalidateSyllabusAnalysis();
+      hrSignalReviewed = false;
+      const clearError = clearSavedHrSignal();
+      hrWorkspaceStatus.textContent = clearError || "Adjust fields, then apply the HR signal to update the course proposal.";
+      hrWorkspaceStatus.className = clearError ? "workspace-status error" : "workspace-status";
+      renderScenario();
+      resetTeacherEditor();
+    });
+
+    restoreSavedHrSignal();
+    studioStudentSelect.value = studentSelect.value;
+    studioDemandSelect.value = demandSelect.value;
+    studioSourceSelect.value = hrSourceInput.value;
+    renderScenario();
+    populateTeacherDraftFromProposal();
+    const hasSavedDraft = loadSavedTeacherDraft();
+    if (hasSavedDraft) {
+      updateTeacherPreview();
+    }
+  </script>
+</body>
+</html>

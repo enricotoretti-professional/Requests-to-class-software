@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>BSP AI | Mechanical Engineering Student Pathways</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #152b3c;
+      --muted: #647584;
+      --navy: #102a43;
+      --blue: #176b87;
+      --blue-soft: #e8f4f7;
+      --paper: #f5f7f6;
+      --white: #fff;
+      --line: #e1e8e9;
+      --gold: #f3bd55;
+      --shadow: 0 18px 50px rgba(16, 42, 67, .09);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(ellipse at 92% 8%, rgba(243, 189, 85, .17), transparent 28rem),
+        var(--paper);
+      color: var(--ink);
+      font: 16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 22px 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--navy);
+      font-size: .9rem;
+      font-weight: 750;
+      letter-spacing: .01em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--navy);
+      color: var(--gold);
+      font-size: 1.15rem;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .privacy-note svg { flex: 0 0 auto; }
+
+    .workspace-link {
+      color: var(--blue);
+      font-size: .82rem;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .workspace-link:hover { text-decoration: underline; }
+    .header-tools { display: flex; align-items: center; gap: 18px; }
+
+    .demo-hub {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      width: min(1100px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .demo-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .86);
+      color: var(--navy);
+      text-decoration: none;
+      transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+    }
+
+    .demo-card:hover {
+      transform: translateY(-2px);
+      border-color: #b7d1d8;
+      box-shadow: 0 8px 22px rgba(16, 42, 67, .07);
+    }
+
+    .demo-card-copy { display: grid; gap: 2px; }
+    .demo-card-copy strong { font-size: .86rem; }
+    .demo-card-copy span { color: var(--muted); font-size: .75rem; }
+    .demo-card-arrow { color: var(--blue); font-size: 1.15rem; }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(240px, .75fr) minmax(0, 1.5fr);
+      gap: clamp(32px, 7vw, 92px);
+      width: min(1100px, calc(100% - 48px));
+      margin: 45px auto 72px;
+      align-items: start;
+    }
+
+    .intro { padding-top: 21px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 20px;
+      color: var(--blue);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      content: "";
+    }
+
+    h1 {
+      max-width: 430px;
+      margin: 0;
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 500;
+      letter-spacing: -.045em;
+      line-height: 1.02;
+    }
+
+    .intro-copy {
+      max-width: 390px;
+      margin: 22px 0 30px;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    .steps {
+      display: grid;
+      gap: 15px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #788793;
+      font-size: .88rem;
+    }
+
+    .step-number {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid #d5dfe2;
+      border-radius: 50%;
+      color: #647584;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .steps li.active { color: var(--navy); font-weight: 700; }
+    .steps li.active .step-number { border-color: var(--blue); background: var(--blue); color: white; }
+
+    .chat-card {
+      overflow: hidden;
+      border: 1px solid rgba(16, 42, 67, .07);
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 25px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .guide {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .guide-avatar {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 15px;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .guide-name { color: var(--navy); font-size: .9rem; font-weight: 750; }
+    .guide-status { color: var(--muted); font-size: .75rem; }
+
+    .progress-copy {
+      color: var(--muted);
+      font-size: .78rem;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      height: 4px;
+      background: #edf1f1;
+    }
+
+    .progress-value {
+      height: 100%;
+      background: var(--blue);
+      transition: width .25s ease;
+    }
+
+    .conversation {
+      display: flex;
+      min-height: 440px;
+      max-height: 66vh;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      padding: 26px clamp(18px, 4vw, 34px);
+      scroll-behavior: smooth;
+    }
+
+    .message { display: flex; flex-direction: column; gap: 8px; }
+    .message.user { align-items: flex-end; }
+    .bubble {
+      max-width: min(100%, 520px);
+      padding: 14px 17px;
+      border-radius: 5px 17px 17px 17px;
+      background: #f1f5f5;
+      color: var(--ink);
+      font-size: .93rem;
+    }
+    .message.user .bubble {
+      border-radius: 17px 5px 17px 17px;
+      background: var(--navy);
+      color: var(--white);
+    }
+    .bubble p { margin: 0; }
+    .bubble p + p { margin-top: 8px; }
+
+    .choices-intro {
+      margin: 0;
+      color: var(--muted);
+      font-size: .83rem;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 13px;
+    }
+
+    .option {
+      min-height: 62px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--white);
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .option:hover { transform: translateY(-1px); border-color: #9dc4ce; }
+    .option[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); }
+    .option strong { display: block; font-size: .84rem; font-weight: 700; }
+    .option span { display: block; margin-top: 3px; color: var(--muted); font-size: .74rem; line-height: 1.4; }
+
+    .chat-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 25px;
+      border-top: 1px solid var(--line);
+      background: #fcfdfd;
+    }
+
+    .footer-hint { color: var(--muted); font-size: .76rem; }
+    .footer-actions { display: flex; gap: 9px; }
+
+    .btn {
+      min-height: 42px;
+      padding: 0 17px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      cursor: pointer;
+      font-size: .84rem;
+      font-weight: 750;
+      transition: background .16s ease, border-color .16s ease;
+    }
+    .btn:disabled { cursor: not-allowed; opacity: .46; }
+    .btn-secondary { border-color: var(--line); background: white; color: var(--ink); }
+    .btn-secondary:hover:not(:disabled) { border-color: #aab9bf; }
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover:not(:disabled) { background: #10566e; }
+
+    .result-heading { margin: 0 0 10px; color: var(--navy); font: 500 1.55rem/1.15 Georgia, "Times New Roman", serif; }
+    .result-copy { margin: 0; color: var(--muted); font-size: .88rem; }
+    .match-list { display: grid; gap: 11px; margin-top: 17px; }
+    .match-card { padding: 15px 16px; border: 1px solid var(--line); border-radius: 13px; }
+    .match-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--navy); font-size: .88rem; font-weight: 750; }
+    .match-score { color: var(--blue); font-size: .74rem; font-weight: 750; white-space: nowrap; }
+    .match-card p { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
+    .disclaimer { margin-top: 16px; padding: 12px 14px; border-radius: 11px; background: #fff7e7; color: #72531c; font-size: .77rem; }
+    .empty-note { color: var(--muted); font-size: .84rem; }
+    .profile-export { margin-top: 14px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+
+    @media (max-width: 800px) {
+      main { grid-template-columns: 1fr; gap: 28px; margin-top: 25px; }
+      .intro { padding-top: 0; }
+      .intro-copy { margin: 14px 0 20px; }
+      .steps { display: flex; flex-wrap: wrap; gap: 9px 16px; }
+      .steps li { gap: 7px; font-size: .77rem; }
+      .step-number { width: 23px; height: 23px; }
+    }
+
+    @media (max-width: 520px) {
+      .topbar { padding: 16px 19px; }
+      .brand { font-size: .78rem; }
+      .privacy-note { font-size: .7rem; }
+      .header-tools { gap: 8px; }
+      .privacy-note span { display: none; }
+      .workspace-link { font-size: .73rem; }
+      .demo-hub { grid-template-columns: 1fr; width: calc(100% - 28px); gap: 8px; }
+      .demo-card { padding: 12px 14px; }
+      main { width: calc(100% - 28px); margin: 22px auto 40px; }
+      h1 { font-size: 2.8rem; }
+      .chat-header { padding: 15px 17px; }
+      .conversation { min-height: 400px; max-height: none; padding: 20px 16px; }
+      .options { grid-template-columns: 1fr; }
+      .option { min-height: 55px; }
+      .chat-footer { align-items: flex-start; padding: 14px 16px; }
+      .footer-hint { max-width: 105px; padding-top: 4px; }
+      .btn { padding: 0 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">M</span>
+      <span>BSP AI<br>MECHANICAL ENGINEERING</span>
+    </div>
+    <div class="header-tools">
+      <a class="workspace-link" href="hr-intake.html">HR data intake</a>
+      <a class="workspace-link" href="course-impact.html">Course impact</a>
+      <div class="privacy-note">
+        <svg width="15" height="17" viewBox="0 0 15 17" fill="none" aria-hidden="true">
+          <path d="M7.5 1.4 13 3.5v4.3c0 3.4-2.2 6.2-5.5 7.8C4.2 14 2 11.2 2 7.8V3.5l5.5-2.1Z" stroke="currentColor" stroke-width="1.4"/>
+          <path d="m5.1 8.3 1.6 1.6 3.3-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Private by design</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="demo-hub" aria-label="Explore BSP AI demo tools">
+    <a class="demo-card" href="hr-intake.html">
+      <span class="demo-card-copy">
+        <strong>HR data intake</strong>
+        <span>Review job-market skills for the teaching demo</span>
+      </span>
+      <span class="demo-card-arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="demo-card" href="course-impact.html">
+      <span class="demo-card-copy">
+        <strong>Course impact studio</strong>
+        <span>See how student and HR signals inform course ideas</span>
+      </span>
+      <span class="demo-card-arrow" aria-hidden="true">→</span>
+    </a>
+  </nav>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">Your next step starts here</p>
+      <h1 id="page-title">Build a path that fits you.</h1>
+      <p class="intro-copy">A short conversation to explore the parts of Mechanical Engineering that match your interests and the work you want to do.</p>
+      <ol class="steps" id="step-list" aria-label="Questionnaire progress"></ol>
+    </section>
+
+    <section class="chat-card" aria-label="Student interest questionnaire">
+      <div class="chat-header">
+        <div class="guide">
+          <div class="guide-avatar" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3.2v2.1M5.8 6.1l1.5 1.5M3 12h2.1m13.8 0H21m-2.8-5.9-1.5 1.5M12 18.7a6.7 6.7 0 1 0 0-13.4 6.7 6.7 0 0 0 0 13.4Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M9.3 12.2h.1m5.2 0h.1M9.5 15a3.5 3.5 0 0 0 5 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="guide-name">Your study guide</div>
+            <div class="guide-status">Mechanical Engineering · Bicocca</div>
+          </div>
+        </div>
+        <span class="progress-copy" id="progress-copy"></span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Questionnaire progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-value" id="progress-value"></div>
+      </div>
+      <div class="conversation" id="conversation" aria-live="polite"></div>
+      <div class="chat-footer">
+        <span class="footer-hint" id="footer-hint"></span>
+        <div class="footer-actions">
+          <button class="btn btn-secondary" id="back-button" type="button">Back</button>
+          <button class="btn btn-primary" id="next-button" type="button">Continue</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const themes = {
+      design: {
+        title: "Product design & development",
+        detail: "Explore CAD, design methods, prototyping, and optimization for products and components.",
+        careers: "Possible directions: product design, mechanical design, or R&D engineering."
+      },
+      automation: {
+        title: "Robotics & automation",
+        detail: "Explore robotics, control systems, mechatronics, and intelligent manufacturing.",
+        careers: "Possible directions: automation, robotics, or controls engineering."
+      },
+      energy: {
+        title: "Energy & sustainable mobility",
+        detail: "Explore thermal systems, renewables, efficient vehicles, and energy technologies.",
+        careers: "Possible directions: energy systems, thermal engineering, or mobility."
+      },
+      materials: {
+        title: "Materials & testing",
+        detail: "Explore material selection, mechanical testing, failure analysis, and additive processes.",
+        careers: "Possible directions: materials, testing, or quality engineering."
+      },
+      manufacturing: {
+        title: "Manufacturing & production",
+        detail: "Explore production processes, factory systems, operations, and supply chains.",
+        careers: "Possible directions: manufacturing, process, or production engineering."
+      },
+      analytics: {
+        title: "Simulation & engineering data",
+        detail: "Explore computational modeling, simulation, data analysis, and engineering optimization.",
+        careers: "Possible directions: simulation, computational, or data-focused engineering."
+      }
+    };
+
+    const questions = [
+      {
+        title: "What kinds of engineering challenges would you like to work on?",
+        hint: "Choose up to 3 that sound interesting.",
+        multi: true,
+        options: [
+          { label: "Design a product or machine", detail: "From first idea to working prototype", themes: ["design"] },
+          { label: "Make machines work together", detail: "Robotics, control, and automation", themes: ["automation"] },
+          { label: "Make energy and transport cleaner", detail: "Efficient systems and sustainable mobility", themes: ["energy"] },
+          { label: "Find the right materials", detail: "Testing, performance, and new materials", themes: ["materials"] },
+          { label: "Improve how things are made", detail: "Production, factories, and operations", themes: ["manufacturing"] },
+          { label: "Solve problems with models and data", detail: "Simulation, analysis, and optimization", themes: ["analytics"] }
+        ]
+      },
+      {
+        title: "Which technical topics would you be most curious to study?",
+        hint: "Choose up to 3.",
+        multi: true,
+        options: [
+          { label: "CAD and product optimization", detail: "Designing components and systems", themes: ["design", "analytics"] },
+          { label: "Robotics and control", detail: "Making automated systems sense and act", themes: ["automation"] },
+          { label: "Thermal systems and renewables", detail: "Heat, energy conversion, and efficiency", themes: ["energy"] },
+          { label: "Materials and mechanical testing", detail: "How materials behave and perform", themes: ["materials"] },
+          { label: "Production systems", detail: "Processes, factories, and quality", themes: ["manufacturing"] },
+          { label: "Simulation and engineering data", detail: "Predicting and improving performance", themes: ["analytics"] }
+        ]
+      },
+      {
+        title: "Imagine your first engineering project. What would you like to spend time doing?",
+        hint: "Choose the activity that appeals to you most.",
+        multi: false,
+        options: [
+          { label: "Sketch, model, and test a new design", detail: "Turn a concept into a better product", themes: ["design"] },
+          { label: "Program a robot or automated machine", detail: "Build and tune an intelligent system", themes: ["automation"] },
+          { label: "Model an energy or mobility system", detail: "Understand performance and efficiency", themes: ["energy", "analytics"] },
+          { label: "Test a material or investigate a failure", detail: "Use evidence to explain what happened", themes: ["materials"] },
+          { label: "Improve a production line", detail: "Make a process safer, faster, or more reliable", themes: ["manufacturing"] },
+          { label: "Build a simulation to compare solutions", detail: "Use models and data to make decisions", themes: ["analytics"] }
+        ]
+      },
+      {
+        title: "What would make a course especially valuable to you?",
+        hint: "Choose one. You can always change your mind later.",
+        multi: false,
+        options: [
+          { label: "A hands-on design project", detail: "Apply theory to a real engineering brief", themes: ["design", "manufacturing"] },
+          { label: "Access to a lab or working equipment", detail: "Experiment, measure, and learn by doing", themes: ["materials", "automation"] },
+          { label: "A challenge from an employer", detail: "Work on a practical industry problem", themes: ["manufacturing", "energy"] },
+          { label: "A chance to model and compare ideas", detail: "Use simulation or data to test options", themes: ["analytics", "design"] }
+        ]
+      }
+    ];
+
+    const answers = Array(questions.length).fill(null);
+    let step = 0;
+    const conversation = document.getElementById("conversation");
+    const progressCopy = document.getElementById("progress-copy");
+    const progressValue = document.getElementById("progress-value");
+    const progressTrack = document.querySelector(".progress-track");
+    const footerHint = document.getElementById("footer-hint");
+    const backButton = document.getElementById("back-button");
+    const nextButton = document.getElementById("next-button");
+    const stepList = document.getElementById("step-list");
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[character]);
+    }
+
+    function selectedLabels(questionIndex) {
+      const answer = answers[questionIndex];
+      if (!answer || answer.length === 0) return "Skipped for now";
+      return answer.map(optionIndex => questions[questionIndex].options[optionIndex].label).join(", ");
+    }
+
+    function renderStepList() {
+      stepList.innerHTML = questions.map((question, index) => `
+        <li class="${index === step ? "active" : ""}">
+          <span class="step-number">${index + 1}</span>
+          <span>${["Your interests", "Topics to explore", "How you like to work", "What you want to learn"][index]}</span>
+        </li>
+      `).join("");
+    }
+
+    function renderConversation() {
+      const transcript = questions.slice(0, step).map((question, index) => `
+        <div class="message">
+          <div class="bubble">${escapeHTML(question.title)}</div>
+        </div>
+        <div class="message user">
+          <div class="bubble">${escapeHTML(selectedLabels(index))}</div>
+        </div>
+      `).join("");
+
+      const question = questions[step];
+      const selection = answers[step] || [];
+      const optionMarkup = question.options.map((option, index) => {
+        const pressed = selection.includes(index);
+        return `
+          <button class="option" type="button" data-option="${index}" aria-pressed="${pressed}">
+            <strong>${escapeHTML(option.label)}</strong>
+            <span>${escapeHTML(option.detail)}</span>
+          </button>
+        `;
+      }).join("");
+
+      conversation.innerHTML = `
+        ${transcript}
+        <div class="message">
+          <div class="bubble">${escapeHTML(question.title)}</div>
+          <div class="choices-intro">${escapeHTML(question.hint)}</div>
+          <div class="options" role="group" aria-label="${escapeHTML(question.title)}">${optionMarkup}</div>
+        </div>
+      `;
+
+      conversation.querySelectorAll(".option").forEach(button => {
+        button.addEventListener("click", () => toggleOption(Number(button.dataset.option)));
+      });
+
+      progressCopy.textContent = `Question ${step + 1} of ${questions.length}`;
+      const answeredCurrentStep = answers[step] && answers[step].length > 0;
+      const percent = Math.round(((step + (answeredCurrentStep ? 1 : 0)) / questions.length) * 100);
+      progressValue.style.width = `${percent}%`;
+      progressTrack.setAttribute("aria-valuenow", String(percent));
+      footerHint.textContent = "Answers aren't sent or saved.";
+      backButton.disabled = step === 0;
+      backButton.textContent = "Back";
+      nextButton.disabled = !answers[step] || answers[step].length === 0;
+      nextButton.textContent = step === questions.length - 1 ? "See my profile" : "Continue";
+      renderStepList();
+    }
+
+    function toggleOption(optionIndex) {
+      const question = questions[step];
+      const current = answers[step] ? [...answers[step]] : [];
+      if (!question.multi) {
+        answers[step] = [optionIndex];
+      } else if (current.includes(optionIndex)) {
+        answers[step] = current.filter(index => index !== optionIndex);
+      } else if (current.length < 3) {
+        answers[step] = [...current, optionIndex];
+      } else {
+        footerHint.textContent = "Choose up to 3 options.";
+        return;
+      }
+      renderConversation();
+    }
+
+    function getRecommendations() {
+      const scores = Object.fromEntries(Object.keys(themes).map(key => [key, 0]));
+      answers.forEach((answer, questionIndex) => {
+        if (!answer) return;
+        const weight = questionIndex === 0 ? 3 : questionIndex === 1 ? 2 : 1;
+        answer.forEach(optionIndex => {
+          questions[questionIndex].options[optionIndex].themes.forEach(theme => {
+            scores[theme] += weight;
+          });
+        });
+      });
+      return Object.entries(scores)
+        .filter(([, score]) => score > 0)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+    }
+
+    function renderResults() {
+      const transcript = questions.map((question, index) => `
+        <div class="message">
+          <div class="bubble">${escapeHTML(question.title)}</div>
+        </div>
+        <div class="message user">
+          <div class="bubble">${escapeHTML(selectedLabels(index))}</div>
+        </div>
+      `).join("");
+      const recommendations = getRecommendations();
+      const cards = recommendations.length
+        ? recommendations.map(([key, score], index) => {
+          const theme = themes[key];
+          return `
+            <article class="match-card">
+              <div class="match-title">
+                <span>${index + 1}. ${escapeHTML(theme.title)}</span>
+                <span class="match-score">${score} interest ${score === 1 ? "match" : "matches"}</span>
+              </div>
+              <p>${escapeHTML(theme.detail)} ${escapeHTML(theme.careers)}</p>
+            </article>
+          `;
+        }).join("")
+        : `<p class="empty-note">You skipped the questions. Go back to choose a few interests and we can suggest areas to explore.</p>`;
+
+      conversation.innerHTML = `
+        ${transcript}
+        <div class="message">
+          <div class="bubble">
+            <h2 class="result-heading">Your starting points</h2>
+            <p class="result-copy">Based on the interests you selected, these are a few areas of Mechanical Engineering you might enjoy exploring.</p>
+            <div class="match-list">${cards}</div>
+            <div class="disclaimer"><strong>A starting point, not a verdict.</strong> This profile reflects only your answers. It is not a psychological test, a job-market analysis, or a recommendation about which courses Bicocca currently offers.</div>
+            <button class="btn btn-secondary profile-export" id="download-profile-button" type="button">Download interest profile for BSP AI teaching studio</button>
+            <p class="choices-intro">This file contains only selected topic themes and scores. Share it with your teacher only if you choose to.</p>
+          </div>
+        </div>
+      `;
+
+      progressCopy.textContent = "Profile ready";
+      progressValue.style.width = "100%";
+      progressTrack.setAttribute("aria-valuenow", "100");
+      footerHint.textContent = "Nothing is saved or sent unless you choose to download your profile.";
+      backButton.disabled = false;
+      nextButton.disabled = false;
+      nextButton.textContent = "Start again";
+      document.getElementById("download-profile-button").addEventListener("click", () => {
+        const interests = recommendations.map(([theme, score]) => ({
+          theme,
+          title: themes[theme].title,
+          score
+        }));
+        const payload = {
+          product: "BSP AI",
+          schema_version: "1.0",
+          type: "student-interest-snapshot",
+          exported_at: new Date().toISOString(),
+          degree_program: "Mechanical Engineering",
+          interests
+        };
+        const blobUrl = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = "bsp-ai-student-interest-profile.json";
+        link.click();
+        URL.revokeObjectURL(blobUrl);
+        footerHint.textContent = "Your profile was downloaded to this device; it has not been sent to the University.";
+      });
+      renderStepList();
+    }
+
+    backButton.addEventListener("click", () => {
+      if (step > 0) {
+        step -= 1;
+        renderConversation();
+        conversation.scrollTop = conversation.scrollHeight;
+      }
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (step < questions.length - 1) {
+        if (!answers[step] || answers[step].length === 0) return;
+        step += 1;
+        renderConversation();
+        conversation.scrollTop = conversation.scrollHeight;
+      } else if (nextButton.textContent === "See my profile") {
+        renderResults();
+        conversation.scrollTop = conversation.scrollHeight;
+      } else {
+        answers.fill(null);
+        step = 0;
+        renderConversation();
+        conversation.scrollTop = 0;
+      }
+    });
+
+    renderConversation();
+  </script>
+</body>
+</html>
